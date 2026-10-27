@@ -1,0 +1,77 @@
+<Project>
+    <ItemGroup Condition="'$(PkgPath)' != ''">
+        <Compile Remove="$(PkgPath)/DatabriksIntegration/Assemblies/**" />
+        <Compile Remove="$(PkgPath)/DatabriksIntegration/Data/**" />
+        <Compile Remove="$(PkgPath)/DatabriksIntegration/SqlScripts/**" />
+        <Compile Remove="$(PkgPath)/DatabriksIntegration/Schemas\**" />
+        <Compile Remove="$(PkgPath)/DatabriksIntegration/Resources/**" />
+        <EmbeddedResource Remove="$(PkgPath)/DatabriksIntegration/Assemblies/**" />
+        <EmbeddedResource Remove="$(PkgPath)/DatabriksIntegration/Data/**" />
+        <EmbeddedResource Remove="$(PkgPath)/DatabriksIntegration/SqlScripts/**" />
+        <EmbeddedResource Remove="$(PkgPath)/DatabriksIntegration/Schemas/**" />
+        <EmbeddedResource Remove="$(PkgPath)/DatabriksIntegration/Resources/**" />
+        <None Remove="$(PkgPath)/DatabriksIntegration/Assemblies/**" />
+        <None Remove="$(PkgPath)/DatabriksIntegration/Data/**" />
+        <None Remove="$(PkgPath)/DatabriksIntegration/SqlScripts/**" />
+        <None Remove="$(PkgPath)/DatabriksIntegration/Schemas/**" />
+        <None Remove="$(PkgPath)/DatabriksIntegration/Resources/**" />
+    </ItemGroup>
+
+    <!--
+        Databricks Zerobus. Kept here because pkg-to-file-system regenerates the .csproj and Directory.Build.props.
+
+        What ships in the package (and is all a server-side Creatio compile needs):
+          Libs/Databricks.Zerobus.dll                         netstandard2.0 fork of the Databricks SDK (vendor/zerobus)
+          native-artifacts/zerobus-0.1.0-runtimes.zip         official zerobus_ffi from NuGet Databricks.Zerobus.Ingest.Sdk
+        Both are refreshed by a local workspace build only (vendor/zerobus present); the server never builds them.
+    -->
+    <PropertyGroup>
+        <ZerobusNativeVersion>0.1.0</ZerobusNativeVersion>
+        <ZerobusForkProject>$(MSBuildThisFileDirectory)..\..\..\vendor\zerobus\src\Zerobus\Zerobus.csproj</ZerobusForkProject>
+        <ZerobusLocalBuild Condition="Exists('$(ZerobusForkProject)')">true</ZerobusLocalBuild>
+        <ZerobusNativeArtifactPath>$(MSBuildThisFileDirectory)native-artifacts\zerobus-$(ZerobusNativeVersion)-runtimes.zip</ZerobusNativeArtifactPath>
+    </PropertyGroup>
+
+    <ItemGroup Label="Zerobus SDK">
+        <Reference Include="Databricks.Zerobus">
+            <HintPath>$(MSBuildThisFileDirectory)Libs\Databricks.Zerobus.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup Label="Native artifact framework references" Condition="'$(TargetFramework)' == 'net472'">
+        <Reference Include="System.IO.Compression" />
+        <Reference Include="System.IO.Compression.FileSystem" />
+    </ItemGroup>
+
+    <ItemGroup Label="Local workspace build only" Condition="'$(ZerobusLocalBuild)' == 'true'">
+        <!-- Builds the fork before this project; its output is copied into Libs instead of being referenced. -->
+        <ProjectReference Include="$(ZerobusForkProject)" ReferenceOutputAssembly="false" Private="false" />
+        <PackageDownload Include="Databricks.Zerobus.Ingest.Sdk" Version="[$(ZerobusNativeVersion)]" />
+    </ItemGroup>
+
+    <Target Name="CopyZerobusForkToLibs" AfterTargets="ResolveProjectReferences" BeforeTargets="ResolveAssemblyReferences"
+            Condition="'$(ZerobusLocalBuild)' == 'true'">
+        <MSBuild Projects="$(ZerobusForkProject)" Targets="GetTargetPath" Properties="Configuration=$(Configuration)">
+            <Output TaskParameter="TargetOutputs" ItemName="ZerobusForkAssembly" />
+        </MSBuild>
+        <Copy SourceFiles="@(ZerobusForkAssembly);@(ZerobusForkAssembly->'%(RootDir)%(Directory)%(Filename).xml')"
+              DestinationFolder="$(MSBuildThisFileDirectory)Libs" SkipUnchangedFiles="true" />
+    </Target>
+
+    <Target Name="PackageZerobusNativeAssets" AfterTargets="Build" Condition="'$(ZerobusLocalBuild)' == 'true'">
+        <PropertyGroup>
+            <ZerobusNativeSource>$(NuGetPackageRoot)databricks.zerobus.ingest.sdk\$(ZerobusNativeVersion)\runtimes</ZerobusNativeSource>
+            <ZerobusNativeStaging>$(IntermediateOutputPath)zerobus-runtimes</ZerobusNativeStaging>
+        </PropertyGroup>
+        <ItemGroup>
+            <!-- Windows x64 only for now; add RIDs here (e.g. linux-x64) for Linux hosts. -->
+            <ZerobusNativeAsset Include="$(ZerobusNativeSource)\win-x64\native\*" />
+        </ItemGroup>
+        <Error Condition="'@(ZerobusNativeAsset)' == ''" Text="Zerobus native assets not found under $(ZerobusNativeSource). Run a restore first." />
+        <RemoveDir Directories="$(ZerobusNativeStaging)" />
+        <Copy SourceFiles="@(ZerobusNativeAsset)" DestinationFolder="$(ZerobusNativeStaging)\win-x64\native" />
+        <MakeDir Directories="$(MSBuildThisFileDirectory)native-artifacts" />
+        <!-- Rewrite only when the native binary changed, so the zip (and its provisioning hash) stays stable. -->
+        <ZipDirectory Condition="!Exists('$(ZerobusNativeArtifactPath)')" SourceDirectory="$(ZerobusNativeStaging)"
+                      DestinationFile="$(ZerobusNativeArtifactPath)" />
+    </Target>
+</Project>

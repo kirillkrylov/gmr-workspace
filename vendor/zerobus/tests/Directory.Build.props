@@ -1,0 +1,8 @@
+<Project>
+  <!-- Mirrors upstream dotnet/Directory.Build.props @122572a (lock files and warnings-as-errors dropped). -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+</Project>

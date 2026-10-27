@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Fork of databricks/zerobus-sdk dotnet/src/Zerobus at commit 122572a3598d0172dadfe4d90680ef4602a7c141
+    (the source of NuGet Databricks.Zerobus.Ingest.Sdk 0.1.0), retargeted to netstandard2.0 so it can run
+    inside Creatio on both .NET 10 and .NET Framework 4.7.2. See FORK.md for the list of changes.
+    The native zerobus_ffi library is NOT built here: it is taken from the official 0.1.0 NuGet package.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>Databricks.Zerobus</RootNamespace>
+    <AssemblyName>Databricks.Zerobus</AssemblyName>
+    <Version>0.1.0</Version>
+    <InformationalVersion>0.1.0+netstandard2.0-fork.122572a</InformationalVersion>
+    <Authors>Databricks</Authors>
+    <Company>Databricks</Company>
+    <Description>Fork of the Databricks Zerobus .NET SDK 0.1.0 retargeted to netstandard2.0.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <IsPackable>false</IsPackable>
+    <Configurations>Debug;Release;dev-n8;dev-nf</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- ImplicitUsings adds System.Net.Http, which is not referenced by netstandard2.0 by default. -->
+    <Using Remove="System.Net.Http" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName).IntegrationTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Compile-time polyfills (IsExternalInit, CallerArgumentExpression, nullable attributes). -->
+    <PackageReference Include="PolySharp" Version="1.15.0" PrivateAssets="all" />
+    <!-- Supplied by the host at runtime: in-box on .NET 10, shipped in Creatio bin on .NET Framework. -->
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+  </ItemGroup>
+
+</Project>

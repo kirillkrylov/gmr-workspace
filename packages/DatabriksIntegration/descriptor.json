@@ -1,0 +1,20 @@
+﻿{
+  "Descriptor": {
+    "UId": "82e0d32b-db64-4c48-859b-3d7d72a01755",
+    "PackageVersion": "0.1.0",
+    "Name": "DatabriksIntegration",
+    "Type": 1,
+    "InstallBehavior": 1,
+    "ModifiedOnUtc": "\/Date(1792752703000)\/",
+    "Maintainer": "Customer",
+    "ProjectPath": "Files/DatabriksIntegration.csproj",
+    "DependsOn": [
+      {
+        "UId": "3a71e376-9ac3-3049-c62b-9c43b9abe054",
+        "PackageVersion": "7.8.0",
+        "Name": "CrtCoreBase",
+        "Type": 1
+      }
+    ]
+  }
+}

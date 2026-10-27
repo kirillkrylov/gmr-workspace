@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Resources Culture="en-US">
+	<Group Type="String">
+		<Items>
+			<Item Name="Caption" Value="Revenue feed run" />
+			<Item Name="Columns.AppliedCount.Caption" Value="Applied" />
+			<Item Name="Columns.Attempt.Caption" Value="Processing attempts" />
+			<Item Name="Columns.CompletedOn.Caption" Value="Completed on" />
+			<Item Name="Columns.Duration.Caption" Value="Duration, sec" />
+			<Item Name="Columns.ErrorCode.Caption" Value="Error" />
+			<Item Name="Columns.ErrorMessage.Caption" Value="Error details" />
+			<Item Name="Columns.FileHash.Caption" Value="File checksum" />
+			<Item Name="Columns.FileId.Caption" Value="File Id" />
+			<Item Name="Columns.FileId.Description" Value="The uploaded file this processing attempt reads." />
+			<Item Name="Columns.FileName.Caption" Value="File name" />
+			<Item Name="Columns.LineCount.Caption" Value="Lines" />
+			<Item Name="Columns.Name.Caption" Value="Run" />
+			<Item Name="Columns.ReceivedOn.Caption" Value="Received on" />
+			<Item Name="Columns.RejectedCount.Caption" Value="Rejected" />
+			<Item Name="Columns.ScheduledOn.Caption" Value="Scheduled slot" />
+			<Item Name="Columns.SkippedCount.Caption" Value="Skipped" />
+			<Item Name="Columns.Stage.Caption" Value="Stage" />
+			<Item Name="Columns.StartedOn.Caption" Value="Started on" />
+			<Item Name="Columns.Status.Caption" Value="Status" />
+			<Item Name="EventsProcessSchema.Caption" Value="Business process" />
+		</Items>
+	</Group>
+</Resources>

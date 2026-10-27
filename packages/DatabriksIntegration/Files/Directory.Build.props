@@ -1,0 +1,5 @@
+<Project>
+	<ItemGroup Label="Entity Files" Condition="'$(PkgPath)' != ''">
+		<Compile Include="$(PkgPath)/DatabriksIntegration/Schemas/DatabricksSyncObject/DatabricksSyncObject.cs" Condition="Exists('$(PkgPath)/DatabriksIntegration/Schemas/DatabricksSyncObject/DatabricksSyncObject.cs')" />
+	</ItemGroup>
+</Project>

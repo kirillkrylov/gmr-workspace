@@ -1,0 +1,8 @@
+﻿{
+  "Properties": {
+    "CreatedInVersion": "10.2.601.0",
+    "Group": "DashboardPage",
+    "OptionalProperties": "{\"DashboardsEntitySchemaName\":\"RevenueFeedRun\",\"DashboardsElementName\":\"Dashboards\",\"DashboardsClientUnitSchemaUId\":\"903a4a01-e91f-4215-b419-c23e4d66d0a2\"}",
+    "SchemaType": "AngularSchema"
+  }
+}

@@ -1,0 +1,14 @@
+﻿{
+  "Descriptor": {
+    "UId": "7322a2ec-4b3b-4224-9251-152592d0e155",
+    "Name": "RevenueFeedRun",
+    "ModifiedOnUtc": "\/Date(1793102368000)\/",
+    "Parent": {
+      "UId": "1bab9dcf-17d5-49f8-9536-8e0064f1dce0",
+      "Name": "BaseEntity"
+    },
+    "ManagerName": "EntitySchemaManager",
+    "Caption": "Revenue feed run",
+    "DependsOn": []
+  }
+}

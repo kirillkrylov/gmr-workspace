@@ -1,0 +1,14 @@
+﻿{
+  "Descriptor": {
+    "UId": "d0025d4a-83d2-46f9-bdfd-4c889f09457e",
+    "Name": "RevenueFeed_Detail",
+    "ModifiedOnUtc": "\/Date(1793100853000)\/",
+    "Parent": {
+      "UId": "01eb38ee-668a-42f0-999d-c2534f979089",
+      "Name": "BaseGridDetailV2"
+    },
+    "ManagerName": "ClientUnitSchemaManager",
+    "Caption": "Revenue feed detail",
+    "DependsOn": []
+  }
+}

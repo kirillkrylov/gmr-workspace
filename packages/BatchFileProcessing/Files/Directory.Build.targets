@@ -1,0 +1,27 @@
+<Project>
+    <ItemGroup Condition="'$(PkgPath)' != ''">
+        <Compile Remove="$(PkgPath)/BatchFileProcessing/Assemblies/**" />
+        <Compile Remove="$(PkgPath)/BatchFileProcessing/Data/**" />
+        <Compile Remove="$(PkgPath)/BatchFileProcessing/SqlScripts/**" />
+        <Compile Remove="$(PkgPath)/BatchFileProcessing/Schemas\**" />
+        <Compile Remove="$(PkgPath)/BatchFileProcessing/Resources/**" />
+        <EmbeddedResource Remove="$(PkgPath)/BatchFileProcessing/Assemblies/**" />
+        <EmbeddedResource Remove="$(PkgPath)/BatchFileProcessing/Data/**" />
+        <EmbeddedResource Remove="$(PkgPath)/BatchFileProcessing/SqlScripts/**" />
+        <EmbeddedResource Remove="$(PkgPath)/BatchFileProcessing/Schemas/**" />
+        <EmbeddedResource Remove="$(PkgPath)/BatchFileProcessing/Resources/**" />
+        <None Remove="$(PkgPath)/BatchFileProcessing/Assemblies/**" />
+        <None Remove="$(PkgPath)/BatchFileProcessing/Data/**" />
+        <None Remove="$(PkgPath)/BatchFileProcessing/SqlScripts/**" />
+        <None Remove="$(PkgPath)/BatchFileProcessing/Schemas/**" />
+        <None Remove="$(PkgPath)/BatchFileProcessing/Resources/**" />
+    </ItemGroup>
+    <!-- Kept here because pkg-to-file-system regenerates BatchFileProcessing.csproj. -->
+    <ItemGroup Label="Scheduler references">
+        <Reference Include="Quartz">
+            <HintPath>$(CoreLibPath)/Quartz.dll</HintPath>
+            <SpecificVersion>False</SpecificVersion>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+</Project>

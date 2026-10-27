@@ -1,0 +1,208 @@
+﻿{
+  "PackageData": [
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "1b452c65-5947-41be-81a0-a27f8f501239"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "DuplicateInFile"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "33d498d9-5ebe-4cb8-bfd1-881c18bc2112"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "HeaderMismatch"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "34e929b0-cec8-4340-87c4-bcc30213e4f6"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "AlreadyApplied"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "361987fa-8768-4d25-89ee-d0dc4602ee08"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "UnexpectedError"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "669836b8-8a40-4df8-a9ca-b9eef5f12c27"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "FileMissing"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "70615dbb-b563-45fc-9274-0bdf20bcd423"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "FileEmpty"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "7a9d8dca-9791-40ac-a9c1-408263dd7297"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "InvalidNumber"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "8c0083db-b3be-4343-9544-ffed07692ac8"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "DuplicateFile"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "91bbd94b-585f-4374-a841-a6128e06a49b"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "FeedMissed"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "9a6d2838-7a70-42e3-b027-cbd96a91ce29"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "MalformedLine"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "9c3a07a6-c6c0-4aed-8ef1-6e3351aa8c29"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "AccountNotFound"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "ba809d2e-f424-42fd-8370-e1a8ec1b5b02"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "InvalidDate"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "bc3f23a6-e8c3-4c62-8759-ebafa1a6eb53"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "MissingValue"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "cc67b546-7b15-477b-a677-f6369ba043c9"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "FileUnreadable"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "d10515eb-0d53-43e9-8901-415f16571588"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "NoDataLines"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "d4ab5a3c-31ef-4011-8201-e3659d7f1a8f"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "OpportunityNotFound"
+        }
+      ]
+    },
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "f363f5be-10b6-47dd-8aa2-fb4eae7a55a9"
+        },
+        {
+          "SchemaColumnUId": "8f7f533c-902e-4df3-8336-015d427155fb",
+          "Value": "OpportunityAccountMismatch"
+        }
+      ]
+    }
+  ]
+}

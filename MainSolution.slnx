@@ -1,0 +1,13 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="dev-n8" />
+    <BuildType Name="dev-nf" />
+  </Configurations>
+  <Project Path="packages\DatabriksIntegration\Files\DatabriksIntegration.csproj" />
+  <Project Path="tests\DatabriksIntegration\DatabriksIntegration.Tests.csproj" />
+  <Project Path="tests\DatabriksIntegration.IntegrationTests\DatabriksIntegration.IntegrationTests.csproj" />
+  <Project Path="packages\BatchFileProcessing\Files\BatchFileProcessing.csproj" />
+  <Project Path="tests\BatchFileProcessing\BatchFileProcessing.Tests.csproj" />
+</Solution>

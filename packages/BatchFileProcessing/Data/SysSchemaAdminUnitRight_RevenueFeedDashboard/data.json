@@ -1,0 +1,33 @@
+﻿{
+  "PackageData": [
+    {
+      "Row": [
+        {
+          "SchemaColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+          "Value": "213e87f9-eb4d-4e30-8f64-b5873eb27e7f"
+        },
+        {
+          "SchemaColumnUId": "05efcbd4-82f8-34eb-9c71-20d2251108cd",
+          "Value": "a29a3ba5-4b0d-de11-9a51-005056c00008",
+          "DisplayValue": "All employees"
+        },
+        {
+          "SchemaColumnUId": "30cc0b9b-8f3c-5bef-9009-c59233b38d02",
+          "Value": 0
+        },
+        {
+          "SchemaColumnUId": "8dfce004-f778-1d1c-d9cc-c08d2dae79c9",
+          "Value": 1
+        },
+        {
+          "SchemaColumnUId": "cbbc22ab-80cd-8a55-1a5f-22d6e5b785de",
+          "Value": 0
+        },
+        {
+          "SchemaColumnUId": "e8a91cb6-8482-87d3-fa37-2286623c90f8",
+          "Value": "b8f0850e-aa91-4bba-9e39-8bfee828f81e"
+        }
+      ]
+    }
+  ]
+}

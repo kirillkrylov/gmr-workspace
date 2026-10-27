@@ -1,0 +1,29 @@
+{
+  "Name": "DatabriksIntegration",
+  "Description": "Demo app during the onsite visit",
+  "Maintainer": "Customer",
+  "Icon": "",
+  "IconName": "",
+  "Color": "#FFAC07",
+  "Version": "0.1.0",
+  "RequiredPlatformVersion": "10.0.0",
+  "MarketplaceLink": "",
+  "HelpLink": "",
+  "OrderLink": "",
+  "SupportEmail": "k.krylov@creatio.com",
+  "Code": "DatabriksIntegration",
+  "Packages": [
+    {
+      "UId": "82e0d32b-db64-4c48-859b-3d7d72a01755",
+      "Name": "DatabriksIntegration"
+    },
+    {
+      "UId": "91e0f5e7-bebc-48b2-99b9-630656400109",
+      "Name": "BatchFileProcessing"
+    },
+    {
+      "UId": "0eb5a4b5-43d5-40db-b11d-ae1aaaf21028",
+      "Name": "RevenueFeed"
+    }
+  ]
+}

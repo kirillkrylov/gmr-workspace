@@ -1,0 +1,10 @@
+﻿{
+  "Descriptor": {
+    "UId": "2a54c06f-ab47-4171-9a11-7506fe49a232",
+    "Name": "RevenueFeedRelatedPage",
+    "ModifiedOnUtc": "\/Date(1793100853000)\/",
+    "ManagerName": "AddonSchemaManager",
+    "Caption": "Revenue feed (Page settings)",
+    "DependsOn": []
+  }
+}

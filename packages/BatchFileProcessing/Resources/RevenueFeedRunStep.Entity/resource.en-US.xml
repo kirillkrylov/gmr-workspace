@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Resources Culture="en-US">
+	<Group Type="String">
+		<Items>
+			<Item Name="Caption" Value="Revenue feed run step" />
+			<Item Name="Columns.Attempt.Caption" Value="Attempt" />
+			<Item Name="Columns.CompletedOn.Caption" Value="Completed on" />
+			<Item Name="Columns.Duration.Caption" Value="Duration, ms" />
+			<Item Name="Columns.Message.Caption" Value="Details" />
+			<Item Name="Columns.Name.Caption" Value="Step" />
+			<Item Name="Columns.Result.Caption" Value="Result" />
+			<Item Name="Columns.Run.Caption" Value="Run" />
+			<Item Name="Columns.Stage.Caption" Value="Stage" />
+			<Item Name="Columns.StartedOn.Caption" Value="Started on" />
+			<Item Name="EventsProcessSchema.Caption" Value="Business process" />
+		</Items>
+	</Group>
+</Resources>

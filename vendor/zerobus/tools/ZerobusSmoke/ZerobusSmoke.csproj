@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Live smoke test for the netstandard2.0 fork on both runtimes Creatio uses. Not shipped. -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net10.0;net472</TargetFrameworks>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Remove="System.Net.Http" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Zerobus\Zerobus.csproj" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" Condition="'$(TargetFramework)' == 'net472'" />
+    <PackageDownload Include="Databricks.Zerobus.Ingest.Sdk" Version="[0.1.0]" />
+  </ItemGroup>
+
+  <!-- Deliberately NOT next to the exe: the smoke test must load it through ZerobusNativeLibrary.Load. -->
+  <ItemGroup Condition="'$(NuGetPackageRoot)' != ''">
+    <None Include="$(NuGetPackageRoot)databricks.zerobus.ingest.sdk/0.1.0/runtimes/win-x64/native/zerobus_ffi.dll"
+          Link="native/win-x64/zerobus_ffi.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Visible="false" />
+  </ItemGroup>
+
+</Project>

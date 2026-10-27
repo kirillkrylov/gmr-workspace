@@ -1,0 +1,14 @@
+<Project>
+	<ItemGroup Label="Entity Files" Condition="'$(PkgPath)' != ''">
+		<Compile Include="$(PkgPath)/BatchFileProcessing/Schemas/Account/Account.cs" Condition="Exists('$(PkgPath)/BatchFileProcessing/Schemas/Account/Account.cs')" />
+		<Compile Include="$(PkgPath)/BatchFileProcessing/Schemas/Opportunity/Opportunity.cs" Condition="Exists('$(PkgPath)/BatchFileProcessing/Schemas/Opportunity/Opportunity.cs')" />
+		<Compile Include="$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedErrorCode/RevenueFeedErrorCode.cs" Condition="Exists('$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedErrorCode/RevenueFeedErrorCode.cs')" />
+		<Compile Include="$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedLine/RevenueFeedLine.cs" Condition="Exists('$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedLine/RevenueFeedLine.cs')" />
+		<Compile Include="$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedLineStatus/RevenueFeedLineStatus.cs" Condition="Exists('$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedLineStatus/RevenueFeedLineStatus.cs')" />
+		<Compile Include="$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedRun/RevenueFeedRun.cs" Condition="Exists('$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedRun/RevenueFeedRun.cs')" />
+		<Compile Include="$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedRunStatus/RevenueFeedRunStatus.cs" Condition="Exists('$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedRunStatus/RevenueFeedRunStatus.cs')" />
+		<Compile Include="$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedRunStep/RevenueFeedRunStep.cs" Condition="Exists('$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedRunStep/RevenueFeedRunStep.cs')" />
+		<Compile Include="$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedStage/RevenueFeedStage.cs" Condition="Exists('$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedStage/RevenueFeedStage.cs')" />
+		<Compile Include="$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedStepResult/RevenueFeedStepResult.cs" Condition="Exists('$(PkgPath)/BatchFileProcessing/Schemas/RevenueFeedStepResult/RevenueFeedStepResult.cs')" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Resources Culture="en-US">
+	<Group Type="String">
+		<Items>
+			<Item Name="Columns.ActualAmount.Caption" Value="Actual revenue" />
+			<Item Name="Columns.AmountVariance.Caption" Value="Revenue variance" />
+			<Item Name="Columns.AmountVariancePercent.Caption" Value="Revenue variance, %" />
+			<Item Name="Columns.LastRevenueRun.Caption" Value="Last revenue update" />
+			<Item Name="Columns.RevenueSystemCode.Caption" Value="Revenue system code" />
+			<Item Name="EventsProcessSchema.Caption" Value="Business process" />
+		</Items>
+	</Group>
+</Resources>

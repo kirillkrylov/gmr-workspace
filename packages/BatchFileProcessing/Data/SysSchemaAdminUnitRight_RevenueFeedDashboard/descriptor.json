@@ -1,0 +1,56 @@
+﻿{
+  "Descriptor": {
+    "UId": "c18ab092-5560-44e1-8c43-76b4afb67b28",
+    "Name": "SysSchemaAdminUnitRight_RevenueFeedDashboard",
+    "ModifiedOnUtc": "\/Date(1793101462000)\/",
+    "InstallType": 0,
+    "Schema": {
+      "UId": "6cf74c22-48b9-4cde-b007-9b449d4c4582",
+      "Name": "SysSchemaAdminUnitRight"
+    },
+    "Columns": [
+      {
+        "ColumnUId": "05efcbd4-82f8-34eb-9c71-20d2251108cd",
+        "IsForceUpdate": false,
+        "IsKey": false,
+        "ColumnName": "SysAdminUnit",
+        "DataTypeValueUId": "b295071f-7ea9-4e62-8d1a-919bf3732ff2"
+      },
+      {
+        "ColumnUId": "30cc0b9b-8f3c-5bef-9009-c59233b38d02",
+        "IsForceUpdate": false,
+        "IsKey": false,
+        "ColumnName": "Position",
+        "DataTypeValueUId": "6b6b74e2-820d-490e-a017-2b73d4ccf2b0"
+      },
+      {
+        "ColumnUId": "8dfce004-f778-1d1c-d9cc-c08d2dae79c9",
+        "IsForceUpdate": false,
+        "IsKey": false,
+        "ColumnName": "RightLevel",
+        "DataTypeValueUId": "6b6b74e2-820d-490e-a017-2b73d4ccf2b0"
+      },
+      {
+        "ColumnUId": "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+        "IsForceUpdate": false,
+        "IsKey": true,
+        "ColumnName": "Id",
+        "DataTypeValueUId": "23018567-a13c-4320-8687-fd6f9e3699bd"
+      },
+      {
+        "ColumnUId": "cbbc22ab-80cd-8a55-1a5f-22d6e5b785de",
+        "IsForceUpdate": false,
+        "IsKey": false,
+        "ColumnName": "Operation",
+        "DataTypeValueUId": "6b6b74e2-820d-490e-a017-2b73d4ccf2b0"
+      },
+      {
+        "ColumnUId": "e8a91cb6-8482-87d3-fa37-2286623c90f8",
+        "IsForceUpdate": false,
+        "IsKey": false,
+        "ColumnName": "RecordId",
+        "DataTypeValueUId": "23018567-a13c-4320-8687-fd6f9e3699bd"
+      }
+    ]
+  }
+}

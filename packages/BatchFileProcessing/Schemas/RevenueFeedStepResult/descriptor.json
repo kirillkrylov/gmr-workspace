@@ -1,0 +1,14 @@
+﻿{
+  "Descriptor": {
+    "UId": "b7232c04-b350-409b-9c44-3b162ad438f7",
+    "Name": "RevenueFeedStepResult",
+    "ModifiedOnUtc": "\/Date(1793099020000)\/",
+    "Parent": {
+      "UId": "11ab4bcb-9b23-4b6d-9c86-520fae925d75",
+      "Name": "BaseLookup"
+    },
+    "ManagerName": "EntitySchemaManager",
+    "Caption": "Revenue feed step result",
+    "DependsOn": []
+  }
+}

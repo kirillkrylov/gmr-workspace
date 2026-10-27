@@ -1,0 +1,14 @@
+﻿{
+  "Descriptor": {
+    "UId": "903a4a01-e91f-4215-b419-c23e4d66d0a2",
+    "Name": "RevenueFeed_ListPage",
+    "ModifiedOnUtc": "\/Date(1793101199000)\/",
+    "Parent": {
+      "UId": "b7b898d0-8c77-4953-c097-23fa6800da02",
+      "Name": "ListPageV3Template"
+    },
+    "ManagerName": "ClientUnitSchemaManager",
+    "Caption": "Revenue feed list page",
+    "DependsOn": []
+  }
+}

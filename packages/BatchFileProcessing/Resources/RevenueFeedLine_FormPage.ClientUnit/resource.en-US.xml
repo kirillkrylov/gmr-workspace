@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Resources Culture="en-US">
+	<Group Type="String">
+		<Items>
+			<Item Name="Caption" Value="Revenue feed line form page" />
+			<Item Name="LocalizableStrings.LineDetailsExpansionPanel_title.Value" Value="Line details" />
+			<Item Name="LocalizableStrings.LineErrorExpansionPanel_title.Value" Value="Error" />
+			<Item Name="LocalizableStrings.LineRawExpansionPanel_title.Value" Value="Raw content" />
+			<Item Name="LocalizableStrings.LineResultExpansionPanel_title.Value" Value="Matching and revenue update" />
+		</Items>
+	</Group>
+</Resources>

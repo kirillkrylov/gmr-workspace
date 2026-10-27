@@ -1,0 +1,13 @@
+﻿{
+  "Descriptor": {
+    "UId": "b8f0850e-aa91-4bba-9e39-8bfee828f81e",
+    "Name": "RevenueFeedDashboard",
+    "ModifiedOnUtc": "\/Date(1793101435000)\/",
+    "Parent": {
+      "UId": "eb4d4a67-25d8-fcfa-7851-c4c91efb7b9c",
+      "Name": "BaseDashboardTemplate"
+    },
+    "ManagerName": "ClientUnitSchemaManager",
+    "Caption": "Revenue feed"
+  }
+}

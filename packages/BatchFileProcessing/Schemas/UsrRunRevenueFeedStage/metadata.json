@@ -1,0 +1,127 @@
+﻿{
+  "MetaData": {
+    "Schema": {
+      "ManagerName": "ProcessUserTaskSchemaManager",
+      "UId": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+      "A2": "UsrRunRevenueFeedStage",
+      "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+      "B1": [
+        {
+          "UId": "0a8dc004-2e49-4ab7-84a6-5a15e81b3dbb",
+          "A2": "CompleteExecuting",
+          "A3": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "A4": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+          "C1": "bool",
+          "C2": true,
+          "C3": true,
+          "C4": "return base.CompleteExecuting(parameters);",
+          "C6": [],
+          "C7": [
+            {
+              "UId": "ebbe0372-cea2-4236-8685-70e4bb5a3332",
+              "A2": "parameters",
+              "A3": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+              "A4": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+              "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+              "AA2": "object[]",
+              "AA3": true
+            }
+          ]
+        },
+        {
+          "UId": "bcd65a4e-5b42-4a4a-8439-15f290f2d47a",
+          "A2": "CancelExecuting",
+          "A3": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "A4": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+          "C1": "void",
+          "C2": true,
+          "C3": true,
+          "C4": "base.CancelExecuting(parameters);",
+          "C6": [],
+          "C7": [
+            {
+              "UId": "e1f8ee6c-9725-4a19-9dd4-f7bb116e4405",
+              "A2": "parameters",
+              "A3": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+              "A4": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+              "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+              "AA2": "object[]",
+              "AA3": true
+            }
+          ]
+        },
+        {
+          "UId": "02de51e8-18af-4217-968f-51f35d575cef",
+          "A2": "GetExecutionData",
+          "A3": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "A4": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+          "C1": "string",
+          "C2": true,
+          "C3": true,
+          "C4": "return string.Empty;",
+          "C6": [],
+          "C7": []
+        },
+        {
+          "UId": "1d378e82-d5fe-4618-85b4-d87554232b66",
+          "A2": "GetNotificationData",
+          "A3": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "A4": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+          "C1": "ProcessElementNotification",
+          "C2": true,
+          "C3": true,
+          "C4": "return base.GetNotificationData();",
+          "C6": [],
+          "C7": []
+        }
+      ],
+      "B2": [],
+      "B3": [],
+      "B6": "91e0f5e7-bebc-48b2-99b9-630656400109",
+      "B8": "10.2.601.0",
+      "FJ1": [
+        {
+          "BL1": "Terrasoft.Core.Process.ProcessSchemaParameter",
+          "UId": "681809ce-bf2e-4dc3-a0db-185526328bc2",
+          "A2": "RunId",
+          "A3": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "A4": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "IL2": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "L1": "23018567-a13c-4320-8687-fd6f9e3699bd",
+          "L8": {},
+          "L12": 0
+        },
+        {
+          "BL1": "Terrasoft.Core.Process.ProcessSchemaParameter",
+          "UId": "a9d75d16-594e-4567-97ed-f69715e446aa",
+          "A2": "IsSuccess",
+          "A3": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "A4": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "IL2": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "L1": "90b65bf8-0ffc-4141-8779-2420877af907",
+          "L8": {},
+          "L12": 1
+        },
+        {
+          "BL1": "Terrasoft.Core.Process.ProcessSchemaParameter",
+          "UId": "e8d4216b-4ff0-48d8-9bfe-e5efa8786744",
+          "A2": "ResultMessage",
+          "A3": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "A4": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "IL2": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+          "L1": "5ca35f10-a101-4c67-a96a-383da6afacfc",
+          "L8": {},
+          "L12": 1
+        }
+      ],
+      "FK4": true,
+      "FK7": true,
+      "FK12": "#839DC3",
+      "FK1": "BatchFileProcessingApp.RevenueFeed.RevenueFeedStageOutcome outcome =\r\n\tBatchFileProcessingApp.RevenueFeed.RevenueFeedService.ExecuteStage(UserConnection, Name, RunId);\r\nIsSuccess = outcome.Succeeded;\r\nResultMessage = outcome.Message;\r\nreturn true;"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Resources Culture="en-US">
+	<Group Type="String">
+		<Items>
+			<Item Name="LocalizableStrings.RevenueExpansionPanel_title.Value" Value="Revenue" />
+			<Item Name="LocalizableStrings.RevenueOpportunityAmount.Value" Value="Opportunity amount" />
+			<Item Name="LocalizableStrings.RevenueUpdatesExpansionPanel_title.Value" Value="Revenue updates" />
+			<Item Name="LocalizableStrings.RevenueUpdatesExportMenuItem_caption.Value" Value="Export to Excel" />
+			<Item Name="LocalizableStrings.RevenueUpdatesListDS_Amount.Value" Value="Billed amount" />
+			<Item Name="LocalizableStrings.RevenueUpdatesListDS_AppliedOn.Value" Value="Applied on" />
+			<Item Name="LocalizableStrings.RevenueUpdatesListDS_BillingReference.Value" Value="Billing reference" />
+			<Item Name="LocalizableStrings.RevenueUpdatesListDS_EndDate.Value" Value="Period end" />
+			<Item Name="LocalizableStrings.RevenueUpdatesListDS_NewAmount.Value" Value="Actual revenue after" />
+			<Item Name="LocalizableStrings.RevenueUpdatesListDS_PreviousAmount.Value" Value="Actual revenue before" />
+			<Item Name="LocalizableStrings.RevenueUpdatesListDS_Run.Value" Value="Run" />
+			<Item Name="LocalizableStrings.RevenueUpdatesListDS_StartDate.Value" Value="Period start" />
+			<Item Name="LocalizableStrings.RevenueUpdatesListDS_Status.Value" Value="Status" />
+			<Item Name="LocalizableStrings.RevenueUpdatesSearchFilter_placeholder.Value" Value="Search" />
+		</Items>
+	</Group>
+</Resources>

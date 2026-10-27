@@ -1,0 +1,32 @@
+﻿{
+  "Descriptor": {
+    "UId": "91e0f5e7-bebc-48b2-99b9-630656400109",
+    "PackageVersion": "0.1.0",
+    "Name": "BatchFileProcessing",
+    "Type": 1,
+    "InstallBehavior": 1,
+    "ModifiedOnUtc": "\/Date(1793099086000)\/",
+    "Maintainer": "Customer",
+    "ProjectPath": "Files/BatchFileProcessing.csproj",
+    "DependsOn": [
+      {
+        "UId": "2ecba2bd-b810-47a5-a1b1-08c888529d6c",
+        "PackageVersion": "7.8.0",
+        "Name": "CrtCustomer360App",
+        "Type": 1
+      },
+      {
+        "UId": "3a71e376-9ac3-3049-c62b-9c43b9abe054",
+        "PackageVersion": "7.8.0",
+        "Name": "CrtCoreBase",
+        "Type": 1
+      },
+      {
+        "UId": "7f7fd442-73f5-43b9-aae2-a3e87a53abb3",
+        "PackageVersion": "7.8.0",
+        "Name": "CrtLeadOppMgmtApp",
+        "Type": 1
+      }
+    ]
+  }
+}

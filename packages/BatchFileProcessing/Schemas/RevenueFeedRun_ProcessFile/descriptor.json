@@ -1,0 +1,10 @@
+﻿{
+  "Descriptor": {
+    "UId": "56a8f05e-385a-4cde-b12c-f59ecc72a4d5",
+    "Name": "RevenueFeedRun_ProcessFile",
+    "ModifiedOnUtc": "\/Date(1793102223000)\/",
+    "ManagerName": "ProcessSchemaManager",
+    "Caption": "Process revenue feed file",
+    "DependsOn": []
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "Packages": [
+    "DatabriksIntegration",
+    "BatchFileProcessing",
+    "RevenueFeed"
+  ],
+  "ApplicationVersion": "10.2.601",
+  "IgnorePackages": [],
+  "ExternalPackages": []
+}

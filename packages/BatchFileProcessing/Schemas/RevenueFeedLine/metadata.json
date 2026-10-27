@@ -1,0 +1,258 @@
+= MetaData.Schema.UId "755d3dc6-984b-4a86-a330-5a0786dccd2e"
+= MetaData.Schema.A2 "RevenueFeedLine"
+= MetaData.Schema.A5 "dce9e506-cdc4-4f94-8aca-7c5f14890ba9"
+= MetaData.Schema.B6 "91e0f5e7-bebc-48b2-99b9-630656400109"
+= MetaData.Schema.B8 "10.2.601.0"
+= MetaData.Schema.EG1.UId "6516f192-570e-4b75-b752-11797eea3c1a"
+= MetaData.Schema.EG1.A2 "Entity_d1d69c4EventsProcess"
+= MetaData.Schema.EG1.A5 "dce9e506-cdc4-4f94-8aca-7c5f14890ba9"
++ MetaData.Schema.EG1.B8 "10.2.601.0"
+= MetaData.Schema.EG1.BK8 "7bb7d6a5-e7a3-4837-83bc-7f785d688165"
+= MetaData.Schema.EG1.BK37.A3 "bb4d6607-026b-4b27-b640-8f5c77c1e89d"
+= MetaData.Schema.EG1.BK37.A4 "bb4d6607-026b-4b27-b640-8f5c77c1e89d"
+= MetaData.Schema.EG1.BK4.["08594d74-60b0-45ce-bf17-bac1a8b127f7"].CK2.["496d4a3c-b644-4a65-b0ed-2534d9236da5"].BL7 "53818048-7868-48f6-ada0-0ebaa65af628"
+= MetaData.Schema.EG1.BK4.["90027ac8-c9c3-4d21-a4f9-da1cde752cd1"].CK2.["d8b8410f-5c8a-4ddc-8fc2-353483452aed"].BL7 "53818048-7868-48f6-ada0-0ebaa65af628"
+= MetaData.Schema.EG1.BK4.["5f3bfbbe-1820-44ca-92f1-6f993169b2dd"].CK2.["d7c806b7-a29b-4ce5-9167-b3319472e772"].BL7 "53818048-7868-48f6-ada0-0ebaa65af628"
+= MetaData.Schema.EG1.BK4.["dbf48103-dcf6-4f53-a052-d727a95ea0b4"].CK2.["933bf2fc-d052-40c8-a3e0-bf60049da5d8"].BL7 "53818048-7868-48f6-ada0-0ebaa65af628"
+= MetaData.Schema.EG1.BK4.["f0646c74-f291-474f-9a10-143ee868f1c9"].CK2.["b3d5b61f-7afe-48b5-a8cc-40317ea9c428"].BL7 "53818048-7868-48f6-ada0-0ebaa65af628"
+= MetaData.Schema.EG1.BK4.["8140d7e7-fb91-4999-8347-543345440efb"].CK2.["c803a450-c8dc-47a4-b704-7125c23db317"].BL7 "53818048-7868-48f6-ada0-0ebaa65af628"
+= MetaData.Schema.EG1.JC1 []
+= MetaData.Schema.D8 "1bab9dcf-17d5-49f8-9536-8e0064f1dce0"
++ MetaData.Schema.D4 "fa4bf29c-2dc1-4639-88cf-583d1ac61a04"
++ MetaData.Schema.D2 {
+  "UId": "fa4bf29c-2dc1-4639-88cf-583d1ac61a04",
+  "A2": "Name",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "ddb3a1ee-07e8-4d62-b7a9-d0e618b00fbd",
+  "E2": 1,
+  "E5": false
+}
++ MetaData.Schema.D2 {
+  "UId": "262f0f98-7bd9-47e9-85be-7fe23b08785f",
+  "A2": "Run",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "b295071f-7ea9-4e62-8d1a-919bf3732ff2",
+  "S4": "7322a2ec-4b3b-4224-9251-152592d0e155",
+  "E2": 1,
+  "E5": false,
+  "E17": "RunId",
+  "E18": "RunName"
+}
++ MetaData.Schema.D2 {
+  "UId": "2ab3d431-58a2-468f-a64f-428478254e6b",
+  "A2": "LineNumber",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "6b6b74e2-820d-490e-a017-2b73d4ccf2b0",
+  "E5": false
+}
++ MetaData.Schema.D2 {
+  "UId": "e9a336dc-770a-4cbc-a970-4f2b52cb7d99",
+  "A2": "RawText",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "c0f04627-4620-4bc0-84e5-9419dc8516b1",
+  "E5": false
+}
++ MetaData.Schema.D2 {
+  "UId": "8cf1924b-ff53-4901-a0a8-3f61158e5391",
+  "A2": "BillingReference",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "ddb3a1ee-07e8-4d62-b7a9-d0e618b00fbd",
+  "E5": false
+}
++ MetaData.Schema.D2 {
+  "UId": "2ae9961f-ab65-4164-b4a1-fbbc40ab0451",
+  "A2": "AccountCode",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "ddb3a1ee-07e8-4d62-b7a9-d0e618b00fbd",
+  "E5": false
+}
++ MetaData.Schema.D2 {
+  "UId": "e6d522a0-67b1-448c-9770-ebbd6dd86e0b",
+  "A2": "OpportunityCode",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "ddb3a1ee-07e8-4d62-b7a9-d0e618b00fbd",
+  "E5": false
+}
++ MetaData.Schema.D2 {
+  "UId": "2bde7e89-5044-45e7-8c6b-c81db1044328",
+  "A2": "StartDate",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "d21e9ef4-c064-4012-b286-fa1a8171da44",
+  "E5": false
+}
++ MetaData.Schema.D2 {
+  "UId": "ee69a267-d445-494e-9558-dcec3aa79e8f",
+  "A2": "EndDate",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "d21e9ef4-c064-4012-b286-fa1a8171da44",
+  "E5": false
+}
++ MetaData.Schema.D2 {
+  "UId": "c10f36e2-163a-420c-98f4-6a3976357bc5",
+  "A2": "Amount",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "969093e2-2b4e-463b-883a-3d3b8c61f0cd",
+  "E5": false
+}
++ MetaData.Schema.D2 {
+  "UId": "76f89385-bb25-4ab7-af4a-16c7c81e06e1",
+  "A2": "Status",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "b295071f-7ea9-4e62-8d1a-919bf3732ff2",
+  "S4": "2ea12762-fe79-4d21-8eba-38ab71dca845",
+  "E5": false,
+  "E17": "StatusId",
+  "E18": "StatusName"
+}
++ MetaData.Schema.D2 {
+  "UId": "94c9ac54-26e0-492a-b568-6f87d0ca32d5",
+  "A2": "ErrorCode",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "b295071f-7ea9-4e62-8d1a-919bf3732ff2",
+  "S4": "57d7d51b-1af9-43c9-b205-5dcc1779f4d0",
+  "E5": false,
+  "E17": "ErrorCodeId",
+  "E18": "ErrorCodeName"
+}
++ MetaData.Schema.D2 {
+  "UId": "8555528a-f750-46d4-aba6-2507becb194b",
+  "A2": "ErrorMessage",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "c0f04627-4620-4bc0-84e5-9419dc8516b1",
+  "E5": false
+}
++ MetaData.Schema.D2 {
+  "UId": "51f520d5-5faf-4fd3-8ac5-3884eb87acc3",
+  "A2": "Account",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "b295071f-7ea9-4e62-8d1a-919bf3732ff2",
+  "S4": "25d7c1ab-1de0-4501-b402-02e0e5a72d6e",
+  "E5": false,
+  "E17": "AccountId",
+  "E18": "AccountName"
+}
++ MetaData.Schema.D2 {
+  "UId": "fbc5aab7-6513-4a81-a37b-b40b8f7b3e00",
+  "A2": "Opportunity",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "b295071f-7ea9-4e62-8d1a-919bf3732ff2",
+  "S4": "ae46fb87-c02c-4ae8-ad31-a923cdd994cf",
+  "E5": false,
+  "E17": "OpportunityId",
+  "E18": "OpportunityTitle"
+}
++ MetaData.Schema.D2 {
+  "UId": "35eb7b59-83df-4ce6-bf59-f6aec9b49ea1",
+  "A2": "PreviousAmount",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "969093e2-2b4e-463b-883a-3d3b8c61f0cd",
+  "E5": false
+}
++ MetaData.Schema.D2 {
+  "UId": "fad6bb53-3aa6-4491-86d7-37f91dcf329c",
+  "A2": "NewAmount",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "969093e2-2b4e-463b-883a-3d3b8c61f0cd",
+  "E5": false
+}
++ MetaData.Schema.D2 {
+  "UId": "a06330c3-53e7-43ed-b74d-40507d823000",
+  "A2": "AppliedOn",
+  "A3": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A4": "755d3dc6-984b-4a86-a330-5a0786dccd2e",
+  "A5": "dce9e506-cdc4-4f94-8aca-7c5f14890ba9",
+  "S2": "d21e9ef4-c064-4012-b286-fa1a8171da44",
+  "E5": false
+}
+~ MetaData.Schema.D2 [
+  "ae0e45ca-c495-4fe7-a39d-3ab7278e1617",
+  "e80190a5-03b2-4095-90f7-a193a960adee",
+  "ebf6bb93-8aa6-4a01-900d-c6ea67affe21",
+  "9928edec-4272-425a-93bb-48743fee4b04",
+  "3015559e-cbc6-406a-88af-07f7930be832",
+  "3fabd836-6a53-4d8d-9069-6df88d9dae1e",
+  "fa4bf29c-2dc1-4639-88cf-583d1ac61a04",
+  "262f0f98-7bd9-47e9-85be-7fe23b08785f",
+  "2ab3d431-58a2-468f-a64f-428478254e6b",
+  "e9a336dc-770a-4cbc-a970-4f2b52cb7d99",
+  "8cf1924b-ff53-4901-a0a8-3f61158e5391",
+  "2ae9961f-ab65-4164-b4a1-fbbc40ab0451",
+  "e6d522a0-67b1-448c-9770-ebbd6dd86e0b",
+  "2bde7e89-5044-45e7-8c6b-c81db1044328",
+  "ee69a267-d445-494e-9558-dcec3aa79e8f",
+  "c10f36e2-163a-420c-98f4-6a3976357bc5",
+  "76f89385-bb25-4ab7-af4a-16c7c81e06e1",
+  "94c9ac54-26e0-492a-b568-6f87d0ca32d5",
+  "8555528a-f750-46d4-aba6-2507becb194b",
+  "51f520d5-5faf-4fd3-8ac5-3884eb87acc3",
+  "fbc5aab7-6513-4a81-a37b-b40b8f7b3e00",
+  "35eb7b59-83df-4ce6-bf59-f6aec9b49ea1",
+  "fad6bb53-3aa6-4491-86d7-37f91dcf329c",
+  "a06330c3-53e7-43ed-b74d-40507d823000"
+]
+= MetaData.Schema.D20.A2 "RevenueFeedLineEvents"
++ MetaData.Schema.D20.FA1 false
++ MetaData.Schema.D20.FA2 false
++ MetaData.Schema.D20.FA3 false
+= MetaData.Schema.D20.FA4 false
+= MetaData.Schema.D20.FA5 false
+= MetaData.Schema.D20.FA6 false
+= MetaData.Schema.D20.FA7 false
++ MetaData.Schema.D20.FA8 false
++ MetaData.Schema.D20.FA9 false
++ MetaData.Schema.D20.FA10 false
+= MetaData.Schema.D20.FA11 false
+= MetaData.Schema.D20.FA12 false
++ MetaData.Schema.D20.FA16 false
++ MetaData.Schema.D20.FA13 false
++ MetaData.Schema.D20.FA14 false
+= MetaData.Schema.D20.FA15 false
++ MetaData.Schema.D20.FA17 false
+= MetaData.Schema.D36.A3 "755d3dc6-984b-4a86-a330-5a0786dccd2e"
+= MetaData.Schema.D36.BS1 false
+- MetaData.Schema.EG1.B6
+- MetaData.Schema.EG1.BK29
+- MetaData.Schema.EG1.BK30
+- MetaData.Schema.D1
+- MetaData.Schema.D20.A5
++ MetaData.Schema.B7 false
++ MetaData.Schema.D2.["ae0e45ca-c495-4fe7-a39d-3ab7278e1617"].E16 false
++ MetaData.Schema.D2.["e80190a5-03b2-4095-90f7-a193a960adee"].E16 false
++ MetaData.Schema.D2.["ebf6bb93-8aa6-4a01-900d-c6ea67affe21"].E16 false
++ MetaData.Schema.D2.["9928edec-4272-425a-93bb-48743fee4b04"].E16 false
++ MetaData.Schema.D2.["3015559e-cbc6-406a-88af-07f7930be832"].E16 false
++ MetaData.Schema.D2.["3fabd836-6a53-4d8d-9069-6df88d9dae1e"].E16 false

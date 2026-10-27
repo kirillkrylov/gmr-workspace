@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Resources Culture="en-US">
+	<Group Type="String">
+		<Items>
+			<Item Name="Caption" Value="Revenue feed form page" />
+			<Item Name="LocalizableStrings.ReprocessButton_caption.Value" Value="Reprocess" />
+			<Item Name="LocalizableStrings.RunDetailsExpansionPanel_title.Value" Value="Run details" />
+			<Item Name="LocalizableStrings.RunErrorExpansionPanel_title.Value" Value="Error" />
+			<Item Name="LocalizableStrings.RunLinesExpansionPanel_title.Value" Value="Lines" />
+			<Item Name="LocalizableStrings.RunLinesExportMenuItem_caption.Value" Value="Export to Excel" />
+			<Item Name="LocalizableStrings.RunLinesListDS_Account.Value" Value="Account" />
+			<Item Name="LocalizableStrings.RunLinesListDS_AccountCode.Value" Value="Account code" />
+			<Item Name="LocalizableStrings.RunLinesListDS_Amount.Value" Value="Billed amount" />
+			<Item Name="LocalizableStrings.RunLinesListDS_BillingReference.Value" Value="Billing reference" />
+			<Item Name="LocalizableStrings.RunLinesListDS_ErrorCode.Value" Value="Error" />
+			<Item Name="LocalizableStrings.RunLinesListDS_ErrorMessage.Value" Value="Error details" />
+			<Item Name="LocalizableStrings.RunLinesListDS_LineNumber.Value" Value="Line number" />
+			<Item Name="LocalizableStrings.RunLinesListDS_NewAmount.Value" Value="Actual revenue after" />
+			<Item Name="LocalizableStrings.RunLinesListDS_Opportunity.Value" Value="Opportunity" />
+			<Item Name="LocalizableStrings.RunLinesListDS_PreviousAmount.Value" Value="Actual revenue before" />
+			<Item Name="LocalizableStrings.RunLinesListDS_Status.Value" Value="Status" />
+			<Item Name="LocalizableStrings.RunLinesSearchFilter_placeholder.Value" Value="Search" />
+			<Item Name="LocalizableStrings.RunStepsExpansionPanel_title.Value" Value="Steps" />
+			<Item Name="LocalizableStrings.RunStepsExportMenuItem_caption.Value" Value="Export to Excel" />
+			<Item Name="LocalizableStrings.RunStepsListDS_Attempt.Value" Value="Attempt" />
+			<Item Name="LocalizableStrings.RunStepsListDS_Duration.Value" Value="Duration, ms" />
+			<Item Name="LocalizableStrings.RunStepsListDS_Message.Value" Value="Details" />
+			<Item Name="LocalizableStrings.RunStepsListDS_Name.Value" Value="Step" />
+			<Item Name="LocalizableStrings.RunStepsListDS_Result.Value" Value="Result" />
+			<Item Name="LocalizableStrings.RunStepsListDS_StartedOn.Value" Value="Started on" />
+			<Item Name="LocalizableStrings.RunStepsSearchFilter_placeholder.Value" Value="Search" />
+		</Items>
+	</Group>
+</Resources>

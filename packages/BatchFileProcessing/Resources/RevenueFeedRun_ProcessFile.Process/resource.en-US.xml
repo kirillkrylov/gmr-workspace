@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Resources Culture="en-US">
+	<Group Type="String">
+		<Items>
+			<Item Name="BaseElements.ApplyAmounts.Caption" Value="Apply amounts" />
+			<Item Name="BaseElements.ApplyAmounts.Parameters.IsSuccess.Caption" Value="Succeeded" />
+			<Item Name="BaseElements.ApplyAmounts.Parameters.ResultMessage.Caption" Value="Result message" />
+			<Item Name="BaseElements.ApplyAmounts.Parameters.RunId.Caption" Value="Run" />
+			<Item Name="BaseElements.ApplyAmounts.Parameters.RunId.DisplayValue" Value="Run" />
+			<Item Name="BaseElements.CompleteRun.Caption" Value="Complete run" />
+			<Item Name="BaseElements.CompleteRun.Parameters.IsSuccess.Caption" Value="Succeeded" />
+			<Item Name="BaseElements.CompleteRun.Parameters.ResultMessage.Caption" Value="Result message" />
+			<Item Name="BaseElements.CompleteRun.Parameters.RunId.Caption" Value="Run" />
+			<Item Name="BaseElements.CompleteRun.Parameters.RunId.DisplayValue" Value="Run" />
+			<Item Name="BaseElements.ConditionalFlow_ApplyAmounts_UpdateTotals.Caption" Value="Amounts applied" />
+			<Item Name="BaseElements.ConditionalFlow_MatchRecords_ApplyAmounts.Caption" Value="Records matched" />
+			<Item Name="BaseElements.ConditionalFlow_ParseLines_MatchRecords.Caption" Value="Lines parsed" />
+			<Item Name="BaseElements.ConditionalFlow_ReceiveFile_ValidateFile.Caption" Value="File received" />
+			<Item Name="BaseElements.ConditionalFlow_ValidateFile_ParseLines.Caption" Value="File valid" />
+			<Item Name="BaseElements.EndRunProcessed.Caption" Value="Run processed" />
+			<Item Name="BaseElements.MatchRecords.Caption" Value="Match records" />
+			<Item Name="BaseElements.MatchRecords.Parameters.IsSuccess.Caption" Value="Succeeded" />
+			<Item Name="BaseElements.MatchRecords.Parameters.ResultMessage.Caption" Value="Result message" />
+			<Item Name="BaseElements.MatchRecords.Parameters.RunId.Caption" Value="Run" />
+			<Item Name="BaseElements.MatchRecords.Parameters.RunId.DisplayValue" Value="Run" />
+			<Item Name="BaseElements.ParseLines.Caption" Value="Parse lines" />
+			<Item Name="BaseElements.ParseLines.Parameters.IsSuccess.Caption" Value="Succeeded" />
+			<Item Name="BaseElements.ParseLines.Parameters.ResultMessage.Caption" Value="Result message" />
+			<Item Name="BaseElements.ParseLines.Parameters.RunId.Caption" Value="Run" />
+			<Item Name="BaseElements.ParseLines.Parameters.RunId.DisplayValue" Value="Run" />
+			<Item Name="BaseElements.ReceiveFile.Caption" Value="Receive file" />
+			<Item Name="BaseElements.ReceiveFile.Parameters.IsSuccess.Caption" Value="Succeeded" />
+			<Item Name="BaseElements.ReceiveFile.Parameters.ResultMessage.Caption" Value="Result message" />
+			<Item Name="BaseElements.ReceiveFile.Parameters.RunId.Caption" Value="Run" />
+			<Item Name="BaseElements.ReceiveFile.Parameters.RunId.DisplayValue" Value="Run" />
+			<Item Name="BaseElements.RunStart.Caption" Value="Run start" />
+			<Item Name="BaseElements.SequenceFlow_ApplyAmounts_CompleteRun.Caption" Value="Applying failed" />
+			<Item Name="BaseElements.SequenceFlow_MatchRecords_CompleteRun.Caption" Value="Matching failed" />
+			<Item Name="BaseElements.SequenceFlow_ParseLines_CompleteRun.Caption" Value="Parsing failed" />
+			<Item Name="BaseElements.SequenceFlow_ReceiveFile_CompleteRun.Caption" Value="File not received" />
+			<Item Name="BaseElements.SequenceFlow_ValidateFile_CompleteRun.Caption" Value="File rejected" />
+			<Item Name="BaseElements.UpdateTotals.Caption" Value="Update totals" />
+			<Item Name="BaseElements.UpdateTotals.Parameters.IsSuccess.Caption" Value="Succeeded" />
+			<Item Name="BaseElements.UpdateTotals.Parameters.ResultMessage.Caption" Value="Result message" />
+			<Item Name="BaseElements.UpdateTotals.Parameters.RunId.Caption" Value="Run" />
+			<Item Name="BaseElements.UpdateTotals.Parameters.RunId.DisplayValue" Value="Run" />
+			<Item Name="BaseElements.ValidateFile.Caption" Value="Validate file" />
+			<Item Name="BaseElements.ValidateFile.Parameters.IsSuccess.Caption" Value="Succeeded" />
+			<Item Name="BaseElements.ValidateFile.Parameters.ResultMessage.Caption" Value="Result message" />
+			<Item Name="BaseElements.ValidateFile.Parameters.RunId.Caption" Value="Run" />
+			<Item Name="BaseElements.ValidateFile.Parameters.RunId.DisplayValue" Value="Run" />
+			<Item Name="Caption" Value="Process revenue feed file" />
+			<Item Name="Parameters.RunIdParameter.Caption" Value="Run" />
+			<Item Name="Parameters.StageMessageParameter.Caption" Value="Stage message" />
+			<Item Name="Parameters.StageSucceededParameter.Caption" Value="Stage succeeded" />
+		</Items>
+	</Group>
+</Resources>

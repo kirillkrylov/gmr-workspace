@@ -1,0 +1,14 @@
+﻿{
+  "Descriptor": {
+    "UId": "888a7130-000a-45e9-8a2f-e5b531cb4de9",
+    "Name": "RevenueFeed_FormPage",
+    "ModifiedOnUtc": "\/Date(1793101153000)\/",
+    "Parent": {
+      "UId": "3b2e117f-8c6b-4ca5-80a2-7ebb497cddf9",
+      "Name": "PageWithTabsFreedomTemplate"
+    },
+    "ManagerName": "ClientUnitSchemaManager",
+    "Caption": "Revenue feed form page",
+    "DependsOn": []
+  }
+}

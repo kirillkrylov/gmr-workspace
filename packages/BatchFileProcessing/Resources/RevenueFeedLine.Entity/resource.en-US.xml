@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Resources Culture="en-US">
+	<Group Type="String">
+		<Items>
+			<Item Name="Caption" Value="Revenue feed line" />
+			<Item Name="Columns.Account.Caption" Value="Account" />
+			<Item Name="Columns.AccountCode.Caption" Value="Account code" />
+			<Item Name="Columns.Amount.Caption" Value="Billed amount" />
+			<Item Name="Columns.AppliedOn.Caption" Value="Applied on" />
+			<Item Name="Columns.BillingReference.Caption" Value="Billing reference" />
+			<Item Name="Columns.EndDate.Caption" Value="Period end" />
+			<Item Name="Columns.ErrorCode.Caption" Value="Error" />
+			<Item Name="Columns.ErrorMessage.Caption" Value="Error details" />
+			<Item Name="Columns.LineNumber.Caption" Value="Line number" />
+			<Item Name="Columns.Name.Caption" Value="Line" />
+			<Item Name="Columns.NewAmount.Caption" Value="Actual revenue after" />
+			<Item Name="Columns.Opportunity.Caption" Value="Opportunity" />
+			<Item Name="Columns.OpportunityCode.Caption" Value="Opportunity code" />
+			<Item Name="Columns.PreviousAmount.Caption" Value="Actual revenue before" />
+			<Item Name="Columns.RawText.Caption" Value="Raw content" />
+			<Item Name="Columns.Run.Caption" Value="Run" />
+			<Item Name="Columns.StartDate.Caption" Value="Period start" />
+			<Item Name="Columns.Status.Caption" Value="Status" />
+			<Item Name="EventsProcessSchema.Caption" Value="Business process" />
+		</Items>
+	</Group>
+</Resources>

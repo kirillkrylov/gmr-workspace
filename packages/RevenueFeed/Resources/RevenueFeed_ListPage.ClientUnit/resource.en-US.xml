@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Resources Culture="en-US">
+	<Group Type="String">
+		<Items>
+			<Item Name="Caption" Value="Revenue feed list page" />
+			<Item Name="LocalizableStrings.PDS_AppliedCount.Value" Value="Applied" />
+			<Item Name="LocalizableStrings.PDS_CompletedOn.Value" Value="Completed on" />
+			<Item Name="LocalizableStrings.PDS_Duration.Value" Value="Duration, sec" />
+			<Item Name="LocalizableStrings.PDS_ErrorCode.Value" Value="Error" />
+			<Item Name="LocalizableStrings.PDS_FileName.Value" Value="File name" />
+			<Item Name="LocalizableStrings.PDS_LineCount.Value" Value="Lines" />
+			<Item Name="LocalizableStrings.PDS_Name.Value" Value="Run" />
+			<Item Name="LocalizableStrings.PDS_RejectedCount.Value" Value="Rejected" />
+			<Item Name="LocalizableStrings.PDS_ScheduledOn.Value" Value="Scheduled slot" />
+			<Item Name="LocalizableStrings.PDS_Stage.Value" Value="Stage" />
+			<Item Name="LocalizableStrings.PDS_Status.Value" Value="Status" />
+		</Items>
+	</Group>
+</Resources>

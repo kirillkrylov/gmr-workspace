@@ -1,0 +1,9 @@
+﻿{
+  "Descriptor": {
+    "UId": "5523ceff-9aa5-4a81-b5c4-e3de800fbd0c",
+    "Name": "UsrRunRevenueFeedStage",
+    "ModifiedOnUtc": "\/Date(1793099380000)\/",
+    "ManagerName": "ProcessUserTaskSchemaManager",
+    "Caption": "Run revenue feed stage"
+  }
+}

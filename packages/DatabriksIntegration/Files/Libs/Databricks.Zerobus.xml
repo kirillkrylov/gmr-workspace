@@ -1,0 +1,1859 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Databricks.Zerobus</name>
+    </assembly>
+    <members>
+        <member name="T:Databricks.Zerobus.IHeadersProvider">
+            <summary>
+            Interface for providing custom authentication headers.
+            Implement this interface to supply custom authentication logic
+            (e.g. fetching tokens from a vault, using managed identity, etc.).
+            </summary>
+            <remarks>
+            Lifetime: the SDK owns the provider for the stream's lifetime and releases it
+            only after any in-flight <see cref="M:Databricks.Zerobus.IHeadersProvider.GetHeaders"/> call (including one during
+            connection recovery) has returned, so you do not need to keep your own
+            reference alive past stream creation. <see cref="M:Databricks.Zerobus.IHeadersProvider.GetHeaders"/> may be invoked
+            from an internal SDK worker thread, not the thread that created the stream, so
+            implementations must be safe to call from any thread.
+            </remarks>
+            <example>
+            <code>
+            public class CustomHeadersProvider : IHeadersProvider
+            {
+                public IDictionary&lt;string, string&gt; GetHeaders()
+                {
+                    return new Dictionary&lt;string, string&gt;
+                    {
+                        ["authorization"] = "Bearer " + GetToken(),
+                        ["x-databricks-zerobus-table-name"] = "catalog.schema.table",
+                    };
+                }
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Databricks.Zerobus.IHeadersProvider.GetHeaders">
+            <summary>
+            Returns the headers to be used for authentication.
+            This method is called by the SDK whenever authentication is needed.
+            </summary>
+            <returns>A dictionary of header key-value pairs.</returns>
+            <exception cref="T:System.Exception">If the headers cannot be obtained.</exception>
+        </member>
+        <member name="T:Databricks.Zerobus.JsonZerobusStream">
+            <summary>
+            A stream that accepts JSON payloads only.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.JsonZerobusStream.IngestRecord(System.String)">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.String)"/>
+        </member>
+        <member name="M:Databricks.Zerobus.JsonZerobusStream.IngestRecordAsync(System.String)">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecordAsync(System.String)"/>
+        </member>
+        <member name="M:Databricks.Zerobus.JsonZerobusStream.IngestRecords(System.String[])">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecords(System.String[])"/>
+        </member>
+        <member name="M:Databricks.Zerobus.JsonZerobusStream.IngestRecordsAsync(System.String[])">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecordsAsync(System.String[])"/>
+        </member>
+        <member name="M:Databricks.Zerobus.JsonZerobusStream.GetUnackedRecords">
+            <summary>
+            Retrieves all records that have not yet been acknowledged by the server.
+            <para>
+            <strong>Important:</strong> This should only be called after the stream has
+            closed or failed. Calling it on an active stream will return an error.
+            </para>
+            </summary>
+            <returns>
+            An array of JSON record payloads as strings, decoded from UTF-8.
+            </returns>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">Thrown if retrieval fails.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the stream has been disposed.</exception>
+        </member>
+        <member name="M:Databricks.Zerobus.JsonZerobusStream.GetUnackedRecordsAsync">
+            <summary>
+            Asynchronously retrieves all records that have not yet been acknowledged by the server.
+            <para>
+            <strong>Important:</strong> This should only be called after the stream has
+            closed or failed. Calling it on an active stream will return an error.
+            </para>
+            </summary>
+            <returns>
+            A task that resolves to an array of JSON record payloads as strings, decoded from UTF-8.
+            </returns>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">Thrown if retrieval fails.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the stream has been disposed.</exception>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.HeadersProviderBridge">
+            <summary>
+            Bridges a managed <see cref="T:Databricks.Zerobus.IHeadersProvider"/> to the native
+            <see cref="T:Databricks.Zerobus.Native.HeadersProviderCallback"/> function pointer.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.HeadersProviderBridge.NativeFree(System.IntPtr)">
+            <summary>
+            Native destroy callback matching <see cref="T:Databricks.Zerobus.Native.HeadersProviderFreeCallback"/>.
+            The FFI owns <paramref name="userData"/> (a <see cref="T:System.Runtime.InteropServices.GCHandle"/> to the
+            bridge) and invokes this exactly once — after any in-flight
+            <see cref="M:Databricks.Zerobus.Native.HeadersProviderBridge.NativeCallback(System.IntPtr)"/> has returned — so freeing the handle here
+            cannot race a live callback. This is what closes the recovery-vs-teardown
+            use-after-free; it is the .NET equivalent of goFreeHeadersProvider /
+            zerobus_cpp_headers_free. Must not throw across the native boundary.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.HeadersProviderBridge.NativeCallback(System.IntPtr)">
+            <summary>
+            The native callback that can be passed as a function pointer to Rust.
+            Called from native code on the Rust runtime thread.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.CHeader">
+            <summary>
+            A single header key-value pair for C FFI.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.CHeaders">
+            <summary>
+            A collection of headers returned from a managed callback.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.CZerobusSdk">
+            <summary>
+            Opaque SDK handle. We only ever hold pointers to this.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.CResult">
+            <summary>
+            Result struct returned by most FFI calls.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.CZerobusStream">
+            <summary>
+            Opaque stream handle.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.CStreamConfigurationOptions">
+            <summary>
+            Stream configuration options passed to the native layer.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.CStreamConfigurationOptionsBlittable">
+            <summary>
+            Fork addition: blittable mirror of <see cref="T:Databricks.Zerobus.Native.CStreamConfigurationOptions"/> (bool fields as bytes)
+            so it can be a P/Invoke return type on .NET Framework.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.CRecord">
+            <summary>
+            Represents a single record (either Proto or JSON) returned by get_unacked_records.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.CRecordArray">
+            <summary>
+            An array of records returned by get_unacked_records.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.HeadersProviderCallback">
+            <summary>
+            Callback signature for the headers provider.
+            Matches: CHeaders (*HeadersProviderCallback)(void* user_data)
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.HeadersProviderFreeCallback">
+            <summary>
+            Callback that releases the headers provider's user_data.
+            Matches: void (*HeadersProviderFreeCallback)(void* user_data)
+            </summary>
+            <remarks>
+            The FFI owns user_data and invokes this exactly once, after any in-flight
+            GetHeaders callback has returned — so it is safe to free the provider here.
+            May run on an internal SDK worker thread, so it must not throw across the
+            native boundary.
+            </remarks>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.CreateStreamAsyncCallback">
+            <summary>
+            Callback for async stream creation completion.
+            Matches: void (*CreateStreamAsyncCallback)(CZerobusStream* stream, const CResult* result, void* user_data)
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.OffsetAsyncCallback">
+            <summary>
+            Callback for async offset-returning operations.
+            Matches: void (*OffsetAsyncCallback)(int64_t offset, const CResult* result, void* user_data)
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.BoolAsyncCallback">
+            <summary>
+            Callback for async bool-returning operations.
+            Matches: void (*BoolAsyncCallback)(bool value, const CResult* result, void* user_data)
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.RecordArrayAsyncCallback">
+            <summary>
+            Callback for async record-array-returning operations.
+            Matches: void (*RecordArrayAsyncCallback)(CRecordArray records, const CResult* result, void* user_data)
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.NativeMethods">
+            <summary>
+            P/Invoke declarations for the zerobus_ffi native library.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.Native.NativeInterop">
+            <summary>
+            Provides safe, managed wrappers around the raw P/Invoke layer.
+            All methods convert <see cref="T:Databricks.Zerobus.Native.CResult"/> errors into <see cref="T:Databricks.Zerobus.ZerobusException"/>.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.ToException(Databricks.Zerobus.Native.CResult*)">
+            <summary>
+            Converts a transient <see cref="T:Databricks.Zerobus.Native.CResult"/> pointer (valid only for the duration of
+            a native callback) to a <see cref="T:Databricks.Zerobus.ZerobusException"/>.
+            Unlike <see cref="M:Databricks.Zerobus.Native.NativeInterop.ToException(Databricks.Zerobus.Native.CResult@)"/>, this overload does <b>not</b> free
+            the error message — Rust owns and frees it after the callback returns.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.ToException(Databricks.Zerobus.Native.CResult@)">
+            <summary>
+            Converts a <see cref="T:Databricks.Zerobus.Native.CResult"/> to a <see cref="T:Databricks.Zerobus.ZerobusException"/> (or null on success).
+            Frees the native error message string.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.ThrowIfFailed(Databricks.Zerobus.Native.CResult@)">
+            <summary>
+            Throws if the <see cref="T:Databricks.Zerobus.Native.CResult"/> indicates failure.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.SdkCreateStream(System.IntPtr,System.String,System.ReadOnlySpan{System.Byte},System.String,System.String,Databricks.Zerobus.Native.CStreamConfigurationOptions@)">
+            <summary>
+            Creates a stream with OAuth credentials.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.SdkCreateStreamAsync(System.IntPtr,System.String,System.ReadOnlySpan{System.Byte},System.String,System.String,Databricks.Zerobus.Native.CStreamConfigurationOptions@)">
+            <summary>
+            Creates a stream with OAuth credentials asynchronously.
+            Returns immediately; the returned <see cref="T:System.Threading.Tasks.Task`1"/> completes on the Tokio
+            thread when stream creation succeeds or fails.
+            </summary>
+            <remarks>
+            <paramref name="descriptorProto"/> is copied by Rust before this method returns, so
+            the span does not need to remain valid after the call.
+            </remarks>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.SdkCreateStreamWithHeadersProvider(System.IntPtr,System.String,System.ReadOnlySpan{System.Byte},Databricks.Zerobus.Native.HeadersProviderCallback,System.IntPtr,Databricks.Zerobus.Native.HeadersProviderFreeCallback,Databricks.Zerobus.Native.CStreamConfigurationOptions@)">
+            <summary>
+            Creates a stream with a custom headers provider callback.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.SdkCreateStreamWithHeadersProviderAsync(System.IntPtr,System.String,System.Byte[],Databricks.Zerobus.Native.HeadersProviderCallback,System.IntPtr,Databricks.Zerobus.Native.HeadersProviderFreeCallback,Databricks.Zerobus.Native.CStreamConfigurationOptions)">
+            <summary>
+            Creates a stream with a custom headers provider callback asynchronously.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.SdkRecreateStream(System.IntPtr,System.IntPtr)">
+            <summary>
+            Recreates a stream from an existing stream.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.SdkRecreateStreamAsync(System.IntPtr,System.IntPtr)">
+            <summary>
+            Recreates a stream from an existing stream asynchronously.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamIngestProtoRecord(System.IntPtr,System.ReadOnlySpan{System.Byte})">
+            <summary>
+            Ingests a single protobuf record and returns the offset.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamIngestProtoRecordAsync(System.IntPtr,System.Byte[])">
+            <summary>
+            Ingests a single protobuf record asynchronously and returns the offset.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamIngestJsonRecord(System.IntPtr,System.String)">
+            <summary>
+            Ingests a single JSON record and returns the offset.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamIngestJsonRecordAsync(System.IntPtr,System.String)">
+            <summary>
+            Ingests a single JSON record asynchronously and returns the offset.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamIngestProtoRecords(System.IntPtr,System.Byte[][])">
+            <summary>
+            Ingests a batch of protobuf records and returns the batch offset (or -1 if empty).
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamIngestProtoRecordsAsync(System.IntPtr,System.Byte[][])">
+            <summary>
+            Ingests a batch of protobuf records asynchronously and returns the batch offset (or -1 if empty).
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamIngestJsonRecords(System.IntPtr,System.String[])">
+            <summary>
+            Ingests a batch of JSON records and returns the batch offset (or -1 if empty).
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamIngestJsonRecordsAsync(System.IntPtr,System.String[])">
+            <summary>
+            Ingests a batch of JSON records asynchronously and returns the batch offset (or -1 if empty).
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamWaitForOffset(System.IntPtr,System.Int64)">
+            <summary>
+            Waits for a specific offset to be acknowledged.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamWaitForOffsetAsync(System.IntPtr,System.Int64)">
+            <summary>
+            Waits for a specific offset to be acknowledged asynchronously.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamFlush(System.IntPtr)">
+            <summary>
+            Flushes all pending records.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamFlushAsync(System.IntPtr)">
+            <summary>
+            Flushes all pending records asynchronously.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamGetUnackedRecords(System.IntPtr)">
+            <summary>
+            Retrieves all unacknowledged records from a closed/failed stream.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamGetUnackedRecordsAsync(System.IntPtr)">
+            <summary>
+            Retrieves all unacknowledged records from a closed/failed stream asynchronously.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamClose(System.IntPtr)">
+            <summary>
+            Closes the stream gracefully.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.StreamCloseAsync(System.IntPtr)">
+            <summary>
+            Closes the stream gracefully asynchronously.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.ConvertConfig(Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Converts managed <see cref="T:Databricks.Zerobus.StreamConfigurationOptions"/> to the native struct,
+            applying defaults for unset values.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.SdkBuilderNew">
+            <summary>
+            Allocates a new native SDK builder. Must be terminated with
+            <see cref="M:Databricks.Zerobus.Native.NativeInterop.SdkBuilderBuild(System.IntPtr)"/> or <see cref="M:Databricks.Zerobus.Native.NativeMethods.SdkBuilderFree(System.IntPtr)"/>.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.Native.NativeInterop.SdkBuilderBuild(System.IntPtr)">
+            <summary>
+            Consumes the builder and returns a native SDK pointer.
+            The builder pointer must not be used after this call.
+            </summary>
+        </member>
+        <member name="F:Databricks.Zerobus.NetStandardPolyfills.LPUTF8Str">
+            <summary>
+            <c>UnmanagedType.LPUTF8Str</c> (48). Missing from the netstandard2.0 reference surface but
+            honoured by the runtime on .NET Framework 4.7+ and .NET Core.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.TaskCompletionSource">
+            <summary>
+            Non-generic <c>TaskCompletionSource</c> (.NET 5+) built on <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/>.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.ProtoZerobusStream">
+            <summary>
+            A stream that accepts protobuf payloads only.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ProtoZerobusStream.IngestRecord(System.Byte[])">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.Byte[])"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ProtoZerobusStream.IngestRecordAsync(System.Byte[])">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecordAsync(System.Byte[])"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ProtoZerobusStream.IngestRecord(System.ReadOnlySpan{System.Byte})">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.ReadOnlySpan{System.Byte})"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ProtoZerobusStream.IngestRecords(System.Byte[][])">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecords(System.Byte[][])"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ProtoZerobusStream.IngestRecordsAsync(System.Byte[][])">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecordsAsync(System.Byte[][])"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ProtoZerobusStream.GetUnackedRecords">
+            <summary>
+            Retrieves all records that have not yet been acknowledged by the server.
+            <para>
+            <strong>Important:</strong> This should only be called after the stream has
+            closed or failed. Calling it on an active stream will return an error.
+            </para>
+            </summary>
+            <returns>
+            An array of raw protobuf record payloads as <see cref="T:System.ReadOnlyMemory`1"/> of <see cref="T:System.Byte"/>.
+            </returns>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">Thrown if retrieval fails.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the stream has been disposed.</exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ProtoZerobusStream.GetUnackedRecordsAsync">
+            <summary>
+            Asynchronously retrieves all records that have not yet been acknowledged by the server.
+            <para>
+            <strong>Important:</strong> This should only be called after the stream has
+            closed or failed. Calling it on an active stream will return an error.
+            </para>
+            </summary>
+            <returns>
+            A task that resolves to an array of raw protobuf record payloads as <see cref="T:System.ReadOnlyMemory`1"/> of <see cref="T:System.Byte"/>.
+            </returns>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">Thrown if retrieval fails.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the stream has been disposed.</exception>
+        </member>
+        <member name="T:Databricks.Zerobus.RecordType">
+            <summary>
+            Represents the type of records to ingest.
+            </summary>
+        </member>
+        <member name="F:Databricks.Zerobus.RecordType.Unspecified">
+            <summary>
+            No specific record type.
+            </summary>
+        </member>
+        <member name="F:Databricks.Zerobus.RecordType.Proto">
+            <summary>
+            Protocol Buffer encoded records.
+            </summary>
+        </member>
+        <member name="F:Databricks.Zerobus.RecordType.Json">
+            <summary>
+            JSON encoded records.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.StreamConfigurationOptions">
+            <summary>
+            Configuration options for creating a Zerobus stream.
+            Start with <see cref="P:Databricks.Zerobus.StreamConfigurationOptions.Default"/> and override only the fields you need.
+            </summary>
+            <example>
+            <code>
+            var options = StreamConfigurationOptions.Default with
+            {
+                MaxInflightRequests = 50_000,
+                RecoveryRetries = 8,
+            };
+            </code>
+            </example>
+        </member>
+        <member name="P:Databricks.Zerobus.StreamConfigurationOptions.MaxInflightRequests">
+            <summary>
+            Maximum number of requests that can be in-flight (pending acknowledgment) at once.
+            <c>null</c> uses the SDK default.
+            Default: 1,000,000.
+            </summary>
+        </member>
+        <member name="P:Databricks.Zerobus.StreamConfigurationOptions.Recovery">
+            <summary>
+            Enable automatic stream recovery on retryable failures.
+            Default: true.
+            </summary>
+        </member>
+        <member name="P:Databricks.Zerobus.StreamConfigurationOptions.RecoveryTimeoutMs">
+            <summary>
+            Timeout for each recovery attempt in milliseconds.
+            <c>null</c> uses the SDK default.
+            Default: 15,000 (15 seconds).
+            </summary>
+        </member>
+        <member name="P:Databricks.Zerobus.StreamConfigurationOptions.RecoveryBackoffMs">
+            <summary>
+            Backoff delay between recovery attempts in milliseconds.
+            <c>null</c> uses the SDK default.
+            Default: 2,000 (2 seconds).
+            </summary>
+        </member>
+        <member name="P:Databricks.Zerobus.StreamConfigurationOptions.RecoveryRetries">
+            <summary>
+            Maximum number of recovery retry attempts.
+            <c>null</c> uses the SDK default.
+            Default: 4.
+            </summary>
+        </member>
+        <member name="P:Databricks.Zerobus.StreamConfigurationOptions.ServerLackOfAckTimeoutMs">
+            <summary>
+            Server acknowledgment timeout in milliseconds.
+            <c>null</c> uses the SDK default.
+            Default: 60,000 (60 seconds).
+            </summary>
+        </member>
+        <member name="P:Databricks.Zerobus.StreamConfigurationOptions.FlushTimeoutMs">
+            <summary>
+            Flush operation timeout in milliseconds.
+            <c>null</c> uses the SDK default.
+            Default: 300,000 (5 minutes).
+            </summary>
+        </member>
+        <member name="P:Databricks.Zerobus.StreamConfigurationOptions.RecordType">
+            <summary>
+            Type of record to ingest (Proto, Json, or Unspecified).
+            Typed factories such as <see cref="M:Databricks.Zerobus.ZerobusSdk.CreateJsonStream(System.String,System.String,System.String,Databricks.Zerobus.StreamConfigurationOptions)"/>
+            and <see cref="M:Databricks.Zerobus.ZerobusSdk.CreateProtoStream(System.String,System.Byte[],System.String,System.String,Databricks.Zerobus.StreamConfigurationOptions)"/>
+            set this automatically.
+            Default: <see cref="F:Databricks.Zerobus.RecordType.Proto"/>.
+            </summary>
+        </member>
+        <member name="P:Databricks.Zerobus.StreamConfigurationOptions.StreamPausedMaxWaitTimeMs">
+            <summary>
+            Maximum time in milliseconds to wait during graceful stream close
+            when the server sends a CloseStreamSignal.
+            <list type="bullet">
+              <item><c>null</c> — Wait for the full server-specified duration (most graceful, default).</item>
+              <item><c>0</c> — Immediate recovery, close stream right away.</item>
+              <item>A positive value — Wait up to <c>min(value, serverDuration)</c> milliseconds.</item>
+            </list>
+            Default: null.
+            </summary>
+        </member>
+        <member name="P:Databricks.Zerobus.StreamConfigurationOptions.Default">
+            <summary>
+            Returns the default configuration options.
+            This is the idiomatic starting point — use C# record <c>with</c> expressions to override.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.StreamConfigurationOptionsFactory">
+            <summary>
+            Creates <see cref="T:Databricks.Zerobus.StreamConfigurationOptions"/> from callers that cannot use object initializers
+            or <c>with</c> expressions on init-only properties.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.StreamConfigurationOptionsFactory.Create(System.Nullable{System.UInt64},System.Nullable{System.Boolean},System.Nullable{System.UInt64},System.Nullable{System.UInt64},System.Nullable{System.UInt32},System.Nullable{System.UInt64},System.Nullable{System.UInt64})">
+            <summary>
+            Returns <see cref="P:Databricks.Zerobus.StreamConfigurationOptions.Default"/> with the given values replaced.
+            A <c>null</c> argument keeps the default value.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.TableProperties">
+            <summary>
+            Contains information about the target Databricks Delta table.
+            </summary>
+            <param name="TableName">
+            Fully qualified table name in the form <c>catalog.schema.table</c>.
+            </param>
+            <param name="DescriptorProto">
+            Protocol buffer descriptor (required for <see cref="F:Databricks.Zerobus.RecordType.Proto"/> streams, null for JSON).
+            This should be a serialized <c>DescriptorProto</c>.
+            </param>
+        </member>
+        <member name="M:Databricks.Zerobus.TableProperties.#ctor(System.String,System.Byte[])">
+            <summary>
+            Contains information about the target Databricks Delta table.
+            </summary>
+            <param name="TableName">
+            Fully qualified table name in the form <c>catalog.schema.table</c>.
+            </param>
+            <param name="DescriptorProto">
+            Protocol buffer descriptor (required for <see cref="F:Databricks.Zerobus.RecordType.Proto"/> streams, null for JSON).
+            This should be a serialized <c>DescriptorProto</c>.
+            </param>
+        </member>
+        <member name="P:Databricks.Zerobus.TableProperties.TableName">
+            <summary>
+            Fully qualified table name in the form <c>catalog.schema.table</c>.
+            </summary>
+        </member>
+        <member name="P:Databricks.Zerobus.TableProperties.DescriptorProto">
+            <summary>
+            Protocol buffer descriptor (required for <see cref="F:Databricks.Zerobus.RecordType.Proto"/> streams, null for JSON).
+            This should be a serialized <c>DescriptorProto</c>.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.TypedZerobusStream">
+            <summary>
+            Common lifecycle and acknowledgment APIs shared by type-safe stream wrappers.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.TypedZerobusStream.IsClosed">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IsClosed"/>
+        </member>
+        <member name="M:Databricks.Zerobus.TypedZerobusStream.WaitForOffset(System.Int64)">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.WaitForOffset(System.Int64)"/>
+        </member>
+        <member name="M:Databricks.Zerobus.TypedZerobusStream.WaitForOffsetAsync(System.Int64)">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.WaitForOffsetAsync(System.Int64)"/>
+        </member>
+        <member name="M:Databricks.Zerobus.TypedZerobusStream.Flush">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.Flush"/>
+        </member>
+        <member name="M:Databricks.Zerobus.TypedZerobusStream.FlushAsync">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.FlushAsync"/>
+        </member>
+        <member name="M:Databricks.Zerobus.TypedZerobusStream.Close">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.Close"/>
+        </member>
+        <member name="M:Databricks.Zerobus.TypedZerobusStream.CloseAsync">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.CloseAsync"/>
+        </member>
+        <member name="M:Databricks.Zerobus.TypedZerobusStream.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:Databricks.Zerobus.TypedZerobusStream.DisposeAsync">
+            <inheritdoc />
+        </member>
+        <member name="T:Databricks.Zerobus.ZerobusException">
+            <summary>
+            Represents an error from the Zerobus SDK.
+            Errors are categorised as retryable (transient) or non-retryable (fatal).
+            </summary>
+            <remarks>
+            The SDK automatically recovers from retryable errors when
+            <see cref="P:Databricks.Zerobus.StreamConfigurationOptions.Recovery"/> is enabled.
+            Non-retryable errors require manual intervention (e.g. fixing permissions or schema).
+            </remarks>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusException.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initialises a new <see cref="T:Databricks.Zerobus.ZerobusException"/>.
+            </summary>
+            <param name="message">The error message from the native layer.</param>
+            <param name="isRetryable">Whether this error is transient and may succeed on retry.</param>
+        </member>
+        <member name="P:Databricks.Zerobus.ZerobusException.IsRetryable">
+            <summary>
+            Whether this error is transient and the operation may succeed if retried.
+            When <see cref="P:Databricks.Zerobus.StreamConfigurationOptions.Recovery"/> is enabled the SDK
+            handles retryable errors automatically.
+            </summary>
+        </member>
+        <member name="P:Databricks.Zerobus.ZerobusException.RawMessage">
+            <summary>
+            The raw error message from the native layer, without the retryable prefix.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.ZerobusNativeLibrary">
+            <summary>
+            Loads the native <c>zerobus_ffi</c> library from an explicit path before the first SDK call.
+            </summary>
+            <remarks>
+            Hosts that cannot ship the library next to the application (for example Creatio packages, which
+            provision native code into a versioned folder) call <see cref="M:Databricks.Zerobus.ZerobusNativeLibrary.Load(System.String)"/> once at startup. The P/Invoke
+            declarations then bind to the already loaded module: on Windows by module name, and on .NET Core 3+
+            additionally through a <c>DllImportResolver</c> registered via reflection.
+            A native library cannot be unloaded, so the first successful <see cref="M:Databricks.Zerobus.ZerobusNativeLibrary.Load(System.String)"/> wins for the process.
+            </remarks>
+        </member>
+        <member name="F:Databricks.Zerobus.ZerobusNativeLibrary.LibraryName">
+            <summary>The library name used by the P/Invoke declarations.</summary>
+        </member>
+        <member name="P:Databricks.Zerobus.ZerobusNativeLibrary.IsLoaded">
+            <summary>Gets a value indicating whether <see cref="M:Databricks.Zerobus.ZerobusNativeLibrary.Load(System.String)"/> has loaded the library.</summary>
+        </member>
+        <member name="P:Databricks.Zerobus.ZerobusNativeLibrary.LoadedPath">
+            <summary>Gets the absolute path passed to the successful <see cref="M:Databricks.Zerobus.ZerobusNativeLibrary.Load(System.String)"/> call.</summary>
+        </member>
+        <member name="P:Databricks.Zerobus.ZerobusNativeLibrary.PlatformFileName">
+            <summary>
+            Gets the platform file name of the native library (<c>zerobus_ffi.dll</c>, <c>libzerobus_ffi.so</c>
+            or <c>libzerobus_ffi.dylib</c>).
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusNativeLibrary.Load(System.String)">
+            <summary>
+            Loads the native library from <paramref name="path"/>. Repeated calls after a successful load are
+            no-ops, whatever path they pass.
+            </summary>
+            <exception cref="T:System.IO.FileNotFoundException">The file does not exist.</exception>
+            <exception cref="T:System.DllNotFoundException">The operating system refused to load the file.</exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusNativeLibrary.EnsureInitialized">
+            <summary>
+            Registers the .NET Core DllImport resolver once. Safe to call repeatedly; a no-op on .NET Framework.
+            </summary>
+        </member>
+        <member name="T:Databricks.Zerobus.ZerobusSdk">
+             <summary>
+             The main entry point for interacting with the Zerobus ingestion service.
+             Manages the connection to the Zerobus endpoint and Unity Catalog.
+             </summary>
+             <remarks>
+             <para>
+             This class wraps a native Rust SDK via P/Invoke and manages the lifecycle
+             of the underlying unmanaged resource. Always dispose when finished.
+             </para>
+             <para>
+             The SDK is thread-safe — you may create multiple streams from one instance.
+             </para>
+             </remarks>
+             <example>
+             <code>
+             using var sdk = ZerobusSdk.CreateBuilder()
+                 .Endpoint("https://your-shard.zerobus.databricks.com")
+                 .UnityCatalogUrl("https://your-workspace.databricks.com")
+                 .Build();
+            
+             using var stream = sdk.CreateJsonStream(
+                 "catalog.schema.table",
+                 clientId,
+                 clientSecret);
+             </code>
+             </example>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.#ctor(System.IntPtr)">
+            <summary>
+            Internal constructor used by <see cref="M:Databricks.Zerobus.ZerobusSdkBuilder.Build"/>.
+            Takes ownership of the native pointer.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateBuilder">
+            <summary>
+            Returns a new builder for constructing a <see cref="T:Databricks.Zerobus.ZerobusSdk"/> with
+            optional settings such as application name, TLS override, or a Unity
+            Catalog URL that can be omitted when using a custom headers provider.
+            </summary>
+            <returns>A <see cref="T:Databricks.Zerobus.ZerobusSdkBuilder"/> ready to configure and build.</returns>
+            <example>
+            <code>
+            using var sdk = ZerobusSdk.CreateBuilder()
+                .Endpoint("https://zerobus.databricks.com")
+                .UnityCatalogUrl("https://workspace.databricks.com")
+                .ApplicationName("my-service")
+                .Build();
+            </code>
+            </example>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateStream(Databricks.Zerobus.TableProperties,System.String,System.String,Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Creates a new bidirectional gRPC stream for ingesting records into a Databricks table.
+            Uses OAuth 2.0 client credentials flow for authentication.
+            </summary>
+            <param name="tableProperties">Table properties including name and optional protobuf descriptor.</param>
+            <param name="clientId">OAuth 2.0 client ID.</param>
+            <param name="clientSecret">OAuth 2.0 client secret.</param>
+            <param name="options">
+            Stream configuration options. Pass <c>null</c> or omit to use defaults.
+            </param>
+            <returns>A new <see cref="T:Databricks.Zerobus.ZerobusStream"/> ready for record ingestion.</returns>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">
+            Thrown if the stream cannot be created (auth failure, invalid table, etc.).
+            </exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the SDK has been disposed.</exception>
+            <example>
+            <code>
+            using var stream = sdk.CreateStream(
+                new TableProperties("catalog.schema.table"),
+                clientId,
+                clientSecret);
+            </code>
+            </example>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateStreamAsync(Databricks.Zerobus.TableProperties,System.String,System.String,Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Creates a new bidirectional gRPC stream asynchronously.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateJsonStream(System.String,System.String,System.String,Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Creates a JSON-only stream with OAuth 2.0 client credentials authentication.
+            This factory sets <see cref="P:Databricks.Zerobus.StreamConfigurationOptions.RecordType"/> to
+            <see cref="F:Databricks.Zerobus.RecordType.Json"/> automatically and returns a stream wrapper that
+            exposes JSON ingest overloads only.
+            </summary>
+            <param name="tableName">Fully qualified table name in the form <c>catalog.schema.table</c>.</param>
+            <param name="clientId">OAuth 2.0 client ID.</param>
+            <param name="clientSecret">OAuth 2.0 client secret.</param>
+            <param name="options">Optional stream configuration overrides.</param>
+            <returns>A new <see cref="T:Databricks.Zerobus.JsonZerobusStream"/> ready for JSON ingestion.</returns>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateJsonStreamAsync(System.String,System.String,System.String,Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Creates a JSON-only stream asynchronously.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateProtoStream(System.String,System.Byte[],System.String,System.String,Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Creates a protobuf-only stream with OAuth 2.0 client credentials authentication.
+            This factory sets <see cref="P:Databricks.Zerobus.StreamConfigurationOptions.RecordType"/> to
+            <see cref="F:Databricks.Zerobus.RecordType.Proto"/> automatically and returns a stream wrapper that
+            exposes protobuf ingest overloads only.
+            </summary>
+            <param name="tableName">Fully qualified table name in the form <c>catalog.schema.table</c>.</param>
+            <param name="descriptorProto">Serialized protobuf descriptor for the target table schema.</param>
+            <param name="clientId">OAuth 2.0 client ID.</param>
+            <param name="clientSecret">OAuth 2.0 client secret.</param>
+            <param name="options">Optional stream configuration overrides.</param>
+            <returns>A new <see cref="T:Databricks.Zerobus.ProtoZerobusStream"/> ready for protobuf ingestion.</returns>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateProtoStreamAsync(System.String,System.Byte[],System.String,System.String,Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Creates a protobuf-only stream asynchronously.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateStreamWithHeadersProvider(Databricks.Zerobus.TableProperties,Databricks.Zerobus.IHeadersProvider,Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Creates a new bidirectional gRPC stream using a custom headers provider.
+            Use this for custom authentication logic (managed identity, vaults, etc.).
+            </summary>
+            <param name="tableProperties">Table properties including name and optional protobuf descriptor.</param>
+            <param name="headersProvider">Custom implementation of <see cref="T:Databricks.Zerobus.IHeadersProvider"/>.</param>
+            <param name="options">
+            Stream configuration options. Pass <c>null</c> or omit to use defaults.
+            </param>
+            <returns>A new <see cref="T:Databricks.Zerobus.ZerobusStream"/> ready for record ingestion.</returns>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">
+            Thrown if the stream cannot be created (headers provider error, network issues, etc.).
+            </exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the SDK has been disposed.</exception>
+            <example>
+            <code>
+            var provider = new CustomHeadersProvider();
+            using var stream = sdk.CreateStreamWithHeadersProvider(
+                new TableProperties("catalog.schema.table"),
+                provider);
+            </code>
+            </example>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateStreamWithHeadersProviderAsync(Databricks.Zerobus.TableProperties,Databricks.Zerobus.IHeadersProvider,Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Creates a new bidirectional gRPC stream using a custom headers provider asynchronously.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateJsonStreamWithHeadersProvider(System.String,Databricks.Zerobus.IHeadersProvider,Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Creates a JSON-only stream using a custom headers provider.
+            </summary>
+            <param name="tableName">Fully qualified table name in the form <c>catalog.schema.table</c>.</param>
+            <param name="headersProvider">Custom authentication headers provider.</param>
+            <param name="options">Optional stream configuration overrides.</param>
+            <returns>A new <see cref="T:Databricks.Zerobus.JsonZerobusStream"/> ready for JSON ingestion.</returns>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateJsonStreamWithHeadersProviderAsync(System.String,Databricks.Zerobus.IHeadersProvider,Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Creates a JSON-only stream using a custom headers provider asynchronously.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateProtoStreamWithHeadersProvider(System.String,System.Byte[],Databricks.Zerobus.IHeadersProvider,Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Creates a protobuf-only stream using a custom headers provider.
+            </summary>
+            <param name="tableName">Fully qualified table name in the form <c>catalog.schema.table</c>.</param>
+            <param name="descriptorProto">Serialized protobuf descriptor for the target table schema.</param>
+            <param name="headersProvider">Custom authentication headers provider.</param>
+            <param name="options">Optional stream configuration overrides.</param>
+            <returns>A new <see cref="T:Databricks.Zerobus.ProtoZerobusStream"/> ready for protobuf ingestion.</returns>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.CreateProtoStreamWithHeadersProviderAsync(System.String,System.Byte[],Databricks.Zerobus.IHeadersProvider,Databricks.Zerobus.StreamConfigurationOptions)">
+            <summary>
+            Creates a protobuf-only stream using a custom headers provider asynchronously.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.RecreateStream(Databricks.Zerobus.ZerobusStream)">
+            <summary>
+            Recreates a new bidirectional gRPC stream from an existing stream.
+            This is used for recovery scenarios where a stream needs to be re-established
+            using the existing stream's configuration and state.
+            </summary>
+            <param name="stream">The existing stream to recreate from.</param>
+            <remarks>
+            <para>
+            This method transfers ownership from <paramref name="stream"/> to the returned stream.
+            The input stream is disposed as part of recreation and cannot be used afterward.
+            </para>
+            <para>
+            A later <see cref="M:System.IDisposable.Dispose"/> call on the original stream wrapper is a no-op,
+            so <c>using</c> declarations remain safe:
+            <code>
+            using var stream = sdk.CreateStream(...);
+            stream.Close();
+            using var recreated = sdk.RecreateStream(stream);
+            </code>
+            </para>
+            </remarks>
+            <returns>A new <see cref="T:Databricks.Zerobus.ZerobusStream"/> ready for record ingestion.</returns>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">Thrown if the stream cannot be recreated.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the SDK has been disposed.</exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.RecreateStreamAsync(Databricks.Zerobus.ZerobusStream)">
+            <summary>
+            Recreates a new bidirectional gRPC stream asynchronously from an existing stream.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.RecreateStream(Databricks.Zerobus.JsonZerobusStream)">
+            <summary>
+            Recreates a JSON-only stream after the original stream has failed or closed.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.RecreateStreamAsync(Databricks.Zerobus.JsonZerobusStream)">
+            <summary>
+            Recreates a JSON-only stream asynchronously after the original stream has failed or closed.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.RecreateStream(Databricks.Zerobus.ProtoZerobusStream)">
+            <summary>
+            Recreates a protobuf-only stream after the original stream has failed or closed.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.RecreateStreamAsync(Databricks.Zerobus.ProtoZerobusStream)">
+            <summary>
+            Recreates a protobuf-only stream asynchronously after the original stream has failed or closed.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdk.Finalize">
+            <summary>Safety-net release of native memory for leaked instances.</summary>
+        </member>
+        <member name="T:Databricks.Zerobus.ZerobusSdkBuilder">
+             <summary>
+             A builder for creating <see cref="T:Databricks.Zerobus.ZerobusSdk"/> instances with optional configuration.
+             </summary>
+             <remarks>
+             <para>
+             Obtain an instance via <see cref="M:Databricks.Zerobus.ZerobusSdk.CreateBuilder"/> and call the
+             fluent setter methods before calling <see cref="M:Databricks.Zerobus.ZerobusSdkBuilder.Build"/>.
+             </para>
+             <para>
+             The builder is single-use: calling <see cref="M:Databricks.Zerobus.ZerobusSdkBuilder.Build"/> or <see cref="M:Databricks.Zerobus.ZerobusSdkBuilder.Dispose"/>
+             consumes it. Any further method calls after either will throw
+             <see cref="T:System.ObjectDisposedException"/>.
+             </para>
+             </remarks>
+             <example>
+             OAuth credentials:
+             <code>
+             using var sdk = ZerobusSdk.CreateBuilder()
+                 .Endpoint("https://zerobus.databricks.com")
+                 .UnityCatalogUrl("https://workspace.databricks.com")
+                 .ApplicationName("my-service")
+                 .Build();
+             </code>
+            
+             Custom headers provider (Unity Catalog URL not required):
+             <code>
+             using var sdk = ZerobusSdk.CreateBuilder()
+                 .Endpoint("https://zerobus.databricks.com")
+                 .ApplicationName("my-service")
+                 .Build();
+             </code>
+             </example>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdkBuilder.Endpoint(System.String)">
+            <summary>
+            Sets the Zerobus gRPC endpoint URL (required).
+            </summary>
+            <param name="endpoint">The gRPC endpoint (e.g. <c>https://zerobus.databricks.com</c>).</param>
+            <returns>This builder, for chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="endpoint"/> is null.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the builder has been consumed or disposed.</exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdkBuilder.UnityCatalogUrl(System.String)">
+            <summary>
+            Sets the Unity Catalog URL used for OAuth token acquisition.
+            Required when using OAuth credentials; optional with a custom headers provider.
+            </summary>
+            <param name="unityCatalogUrl">The Unity Catalog URL (e.g. <c>https://workspace.databricks.com</c>).</param>
+            <returns>This builder, for chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="unityCatalogUrl"/> is null.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the builder has been consumed or disposed.</exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdkBuilder.SdkIdentifier(System.String)">
+            <summary>
+            Overrides the SDK identifier portion of the <c>User-Agent</c> header.
+            Wrapper SDKs use this to identify themselves; end-user code should prefer
+            <see cref="M:Databricks.Zerobus.ZerobusSdkBuilder.ApplicationName(System.String)"/> instead.
+            </summary>
+            <param name="sdkIdentifier">The SDK identifier string.</param>
+            <returns>This builder, for chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="sdkIdentifier"/> is null.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the builder has been consumed or disposed.</exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdkBuilder.ApplicationName(System.String)">
+            <summary>
+            Appends an application name to the <c>User-Agent</c> header.
+            Useful for identifying which application is sending data in server-side logs.
+            </summary>
+            <param name="applicationName">The application name.</param>
+            <returns>This builder, for chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="applicationName"/> is null.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the builder has been consumed or disposed.</exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdkBuilder.DisableTls">
+            <summary>
+            Disables TLS for the gRPC connection. TLS is enabled by default.
+            Only use this for local development or testing.
+            </summary>
+            <returns>This builder, for chaining.</returns>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the builder has been consumed or disposed.</exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdkBuilder.Build">
+            <summary>
+            Builds and returns a <see cref="T:Databricks.Zerobus.ZerobusSdk"/> instance.
+            Consumes the builder — any further calls will throw <see cref="T:System.ObjectDisposedException"/>.
+            </summary>
+            <returns>A fully initialised <see cref="T:Databricks.Zerobus.ZerobusSdk"/>.</returns>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">Thrown if the SDK cannot be initialised.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the builder has already been consumed or disposed.</exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusSdkBuilder.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:Databricks.Zerobus.ZerobusStream">
+            <summary>
+            Represents an active bidirectional gRPC stream for ingesting records.
+            Records can be ingested concurrently and will be acknowledged asynchronously.
+            </summary>
+            <remarks>
+            <para>
+            The stream is thread-safe — you may call <see cref="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.String)"/> from
+            multiple threads concurrently, just like the Go SDK supports goroutines.
+            </para>
+            <para>
+            Ingestion is asynchronous: <see cref="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.String)"/> returns as soon as the
+            record is queued; the SDK tracks its acknowledgment in the background.
+            </para>
+            <para>
+            <see cref="M:Databricks.Zerobus.ZerobusStream.Close"/> performs a graceful close (flush + close) but keeps the
+            native stream alive so callers can inspect <see cref="M:Databricks.Zerobus.ZerobusStream.GetUnackedRecords"/> or
+            recover with <c>ZerobusSdk.RecreateStream(...)</c>. Call <see cref="M:Databricks.Zerobus.ZerobusStream.Dispose"/>
+            when you are completely finished with the stream to free native resources.
+            </para>
+            <para>
+            <c>ZerobusSdk.RecreateStream(stream)</c> consumes <c>stream</c> and returns a
+            replacement stream wrapper. The original wrapper is disposed during recreation.
+            <see cref="M:Databricks.Zerobus.ZerobusStream.DisposeAsync"/> performs the same graceful close as <see cref="M:Databricks.Zerobus.ZerobusStream.Dispose"/>
+            without blocking the calling thread, enabling <c>await using</c> for streams.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.IsClosed">
+            <summary>
+            Returns whether the stream has been closed
+            </summary>
+            <exception cref="T:System.ObjectDisposedException"></exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.String)">
+             <summary>
+             Ingests a single record and returns the offset.
+             This is the primary API for record ingestion.
+             </summary>
+             <remarks>
+             Returns before server acknowledgment; use <see cref="M:Databricks.Zerobus.ZerobusStream.Flush"/> or
+             <see cref="M:Databricks.Zerobus.ZerobusStream.WaitForOffset(System.Int64)"/> when acknowledgment is required.
+             </remarks>
+             <param name="payload">
+             The record payload. Pass a <see cref="T:System.String"/> for JSON records
+             or a <c>byte[]</c> / <see cref="T:System.ReadOnlySpan`1"/> of <see cref="T:System.Byte"/>
+             for Protocol Buffer records.
+             </param>
+             <returns>The logical offset assigned to this record.</returns>
+             <exception cref="T:Databricks.Zerobus.ZerobusException">Thrown if ingestion fails.</exception>
+             <exception cref="T:System.ObjectDisposedException">Thrown if the stream has been disposed.</exception>
+             <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="payload"/> is null.</exception>
+             <example>
+             <code>
+             // JSON stream
+             for (int id = 1; id &lt;= 100; id++)
+             {
+                 jsonStream.IngestRecord($"{{\"id\": {id}, \"message\": \"Hello\"}}");
+             }
+             jsonStream.Flush();
+            
+             // Protobuf stream
+             foreach (var message in messages)
+             {
+                 protoStream.IngestRecord(SerializeMyProto(message));
+             }
+             protoStream.Flush();
+             </code>
+             </example>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.IngestRecordAsync(System.String)">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.String)"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.Byte[])">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.String)"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.IngestRecordAsync(System.Byte[])">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.Byte[])"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.ReadOnlySpan{System.Byte})">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.String)"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.IngestRecords(System.String[])">
+            <summary>
+            Ingests a batch of JSON records and returns its assigned offset.
+            </summary>
+            <remarks>
+            The batch succeeds or fails as a unit. All records must be JSON strings. Prefer
+            this API in hot paths to amortize the per-call interop overhead.
+            </remarks>
+            <param name="records">The JSON record strings to ingest.</param>
+            <returns>The offset representing the entire batch, or -1 if the batch is empty.</returns>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">Thrown if ingestion fails.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the stream has been disposed.</exception>
+            <example>
+            <code>
+            string[] records =
+            [
+                "{\"device\": \"sensor-001\", \"temp\": 20}",
+                "{\"device\": \"sensor-002\", \"temp\": 21}",
+            ];
+            stream.IngestRecords(records);
+            stream.Flush();
+            </code>
+            </example>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.IngestRecordsAsync(System.String[])">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecords(System.String[])"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.IngestRecords(System.Byte[][])">
+            <summary>
+            Ingests a batch of protobuf records and returns its assigned offset.
+            </summary>
+            <remarks>
+            The batch succeeds or fails as a unit. All records must be serialized protobuf
+            byte arrays. Prefer this API in hot paths to amortize the per-call interop overhead.
+            </remarks>
+            <param name="records">The protobuf record byte spans to ingest.</param>
+            <returns>The offset representing the entire batch, or -1 if the batch is empty.</returns>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">Thrown if ingestion fails.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the stream has been disposed.</exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.IngestRecordsAsync(System.Byte[][])">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.IngestRecords(System.Byte[][])"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.WaitForOffset(System.Int64)">
+            <summary>
+            Waits for the server to acknowledge all records through the specified offset.
+            </summary>
+            <remarks>
+            Acknowledgments are ordered, so waiting for the last offset also confirms every
+            earlier record. Use this for targeted waits; for a bulk run, <see cref="M:Databricks.Zerobus.ZerobusStream.Flush"/>
+            is simpler. Avoid waiting after every record, which limits throughput to one
+            record per round-trip.
+            </remarks>
+            <param name="offset">
+            The offset to wait for, as returned by <see cref="M:Databricks.Zerobus.ZerobusStream.IngestRecord(System.String)"/> or
+            <see cref="M:Databricks.Zerobus.ZerobusStream.IngestRecords(System.String[])"/>.
+            </param>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">Thrown if the wait fails.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the stream has been disposed.</exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.WaitForOffsetAsync(System.Int64)">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.WaitForOffset(System.Int64)"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.Flush">
+            <summary>
+            Waits for all records queued before the call to be acknowledged.
+            </summary>
+            <remarks>
+            Records queued while the flush is in progress are not included.
+            </remarks>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">
+            Thrown if the flush times out or a record fails with a non-retryable error.
+            </exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the stream has been disposed.</exception>
+            <example>
+            <code>
+            for (int i = 0; i &lt; 1000; i++)
+            {
+                stream.IngestRecord(records[i]);
+            }
+            stream.Flush();
+            </code>
+            </example>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.FlushAsync">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.Flush"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.GetUnackedRecords">
+            <summary>
+            Retrieves all records that have not yet been acknowledged by the server.
+            <para>
+            <strong>Important:</strong> This should only be called after the stream has
+            closed or failed. Calling it on an active stream will return an error.
+            </para>
+            </summary>
+            <returns>
+            An array of raw record payloads as <see cref="T:System.ReadOnlyMemory`1"/> of <see cref="T:System.Byte"/>.
+            JSON payloads are UTF-8 encoded; callers can decode as needed.
+            </returns>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">Thrown if retrieval fails.</exception>
+            <exception cref="T:System.ObjectDisposedException">Thrown if the stream has been disposed.</exception>
+            <example>
+            <code>
+            try
+            {
+                stream.Flush();
+            }
+            catch (ZerobusException)
+            {
+                // A flush timeout can leave the stream active. GetUnackedRecords
+                // requires a closed or failed stream.
+                try
+                {
+                    var unacked = stream.GetUnackedRecords();
+                    Console.WriteLine($"Failed to acknowledge {unacked.Length} records");
+                }
+                catch (ZerobusException retrieval)
+                {
+                    Console.WriteLine($"Could not inspect unacked records: {retrieval.Message}");
+                }
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.GetUnackedRecordsAsync">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.GetUnackedRecords"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.Close">
+            <summary>
+            Gracefully closes the stream after flushing all pending records.
+            After close, ingestion APIs are no longer usable, but the stream remains
+            readable for recovery paths (for example <see cref="M:Databricks.Zerobus.ZerobusStream.GetUnackedRecords"/>).
+            </summary>
+            <remarks>
+            This method does not free native resources. Call <see cref="M:Databricks.Zerobus.ZerobusStream.Dispose"/>
+            after you have finished any recovery operations.
+            </remarks>
+            <exception cref="T:Databricks.Zerobus.ZerobusException">
+            Thrown if flush or close fails.
+            </exception>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.CloseAsync">
+            <inheritdoc cref="M:Databricks.Zerobus.ZerobusStream.Close"/>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.DisposeAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.Finalize">
+            <summary>
+            Safety-net release of native memory for leaked instances.
+            Only frees memory — does NOT call <see cref="M:Databricks.Zerobus.Native.NativeInterop.StreamClose(System.IntPtr)"/>,
+            which performs blocking gRPC I/O and may trigger managed callbacks on
+            Rust-created threads that corrupt the .NET execution context
+            (infinite recursion in <c>CultureInfo.CurrentUICulture</c>).
+            </summary>
+        </member>
+        <member name="P:Databricks.Zerobus.ZerobusStream.NativePointer">
+            <summary>
+            Returns the raw native pointer to the underlying C stream.
+            Internal use only.
+            </summary>
+        </member>
+        <member name="M:Databricks.Zerobus.ZerobusStream.Recreate(System.IntPtr)">
+            <summary>
+            Transfers this stream's native pointer to a new wrapper around
+            <paramref name="newPtr"/>, disposing this one. The provider (when one is
+            used) is owned by the FFI, not the stream, so only the pointer moves.
+            Internal use only.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.AllowNullAttribute">
+            <summary>
+            Specifies that null is allowed as an input even if the corresponding type disallows it.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute">
+            <summary>
+            Indicates that the specified method parameter expects a constant.
+            </summary>
+            <remarks>
+            This can be used to inform tooling that a constant should be used as an argument for the annotated parameter.
+            </remarks>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute.Min">
+            <summary>
+            Indicates the minimum bound of the expected constant, inclusive.
+            </summary>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute.Max">
+            <summary>
+            Indicates the maximum bound of the expected constant, inclusive.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.DisallowNullAttribute">
+            <summary>
+            Specifies that null is disallowed as an input even if the corresponding type allows it.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnAttribute">
+            <summary>
+            Applied to a method that will never return under any circumstance.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute">
+            <summary>
+            Specifies that the method will not return if the associated Boolean parameter is passed the specified value.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.#ctor(System.Boolean)">
+            <summary>
+            Initializes the attribute with the specified parameter value.
+            </summary>
+            <param name="parameterValue">
+            The condition parameter value. Code after the method will be considered unreachable
+            by diagnostics if the argument to the associated parameter matches this value.
+            </param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.ParameterValue">
+            <summary>
+            Gets the condition parameter value.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.ExperimentalAttribute">
+            <summary>
+            Indicates that an API is experimental and it may change in the future.
+            </summary>
+            <remarks>
+            This attribute allows call sites to be flagged with a diagnostic that indicates that an experimental
+            feature is used. Authors can use this attribute to ship preview features in their assemblies.
+            </remarks>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.ExperimentalAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.ExperimentalAttribute"/> class,
+            specifying the ID that the compiler will use when reporting a use of the API the attribute applies to.
+            </summary>
+            <param name="diagnosticId">The ID that the compiler will use when reporting a use of the API the attribute applies to.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.ExperimentalAttribute.DiagnosticId">
+            <summary>
+            Gets the ID that the compiler will use when reporting a use of the API the attribute applies to.
+            </summary>
+            <value>The unique diagnostic ID.</value>
+            <remarks>
+            The diagnostic ID is shown in build output for warnings and errors.
+            <para>This property represents the unique ID that can be used to suppress the warnings or errors, if needed.</para>
+            </remarks>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.ExperimentalAttribute.UrlFormat">
+            <summary>
+            Gets or sets the URL for corresponding documentation.
+            The API accepts a format string instead of an actual URL, creating a generic URL that includes the diagnostic ID.
+            </summary>
+            <value>The format string that represents a URL to corresponding documentation.</value>
+            <remarks>An example format string is <c>https://contoso.com/obsoletion-warnings/{0}</c>.</remarks>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullAttribute">
+            <summary>
+            Specifies that an output may be null even if the corresponding type disallows it.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute">
+            <summary>
+            Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue"/>, the parameter may be null even if the corresponding type disallows it.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.#ctor(System.Boolean)">
+            <summary>
+            Initializes the attribute with the specified return value condition.
+            </summary>
+            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter may be null.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue">
+            <summary>
+            Gets the return value condition.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute">
+            <summary>
+            Specifies that the method or property will ensure that the listed field and property members have not-null values.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.#ctor(System.String)">
+            <summary>
+            Initializes the attribute with a field or property member.
+            </summary>
+            <param name="member">The field or property member that is promised to be not-null.</param>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.#ctor(System.String[])">
+            <summary>
+            Initializes the attribute with the list of field and property members.
+            </summary>
+            <param name="members">The list of field and property members that are promised to be not-null.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.Members">
+            <summary>
+            Gets field or property member names.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute">
+            <summary>
+            Specifies that the method or property will ensure that the listed field and property
+            members have not-null values when returning with the specified return value condition.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String)">
+            <summary>
+            Initializes the attribute with the specified return value condition and a field or property member.
+            </summary>
+            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter will not be null.</param>
+            <param name="member">The field or property member that is promised to be not-null.</param>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String[])">
+            <summary>
+            Initializes the attribute with the specified return value condition and list of field and property members.
+            </summary>
+            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter will not be null.</param>
+            <param name="members">The list of field and property members that are promised to be not-null.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.ReturnValue">
+            <summary>
+            Gets the return value condition.
+            </summary>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.Members">
+            <summary>
+            Gets field or property member names.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.NotNullAttribute">
+            <summary>
+            Specifies that an output will not be null even if the corresponding type allows it.
+            Specifies that an input argument was not null when the call returns.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute">
+            <summary>
+            Specifies that the output will be non-null if the named parameter is non-null.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.#ctor(System.String)">
+            <summary>
+            Initializes the attribute with the associated parameter name.
+            </summary>
+            <param name="parameterName">The associated parameter name. The output will be non-null if the argument to the parameter specified is non-null.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.ParameterName">
+            <summary>
+            Gets the associated parameter name.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute">
+            <summary>
+            Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue"/>, the parameter will not be null even if the corresponding type allows it.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.#ctor(System.Boolean)">
+            <summary>
+            Initializes the attribute with the specified return value condition.
+            </summary>
+            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter will not be null.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue">
+            <summary>Gets the return value condition.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute">
+            <summary>
+            Specifies that this constructor sets all required members for the current type,
+            and callers do not need to set any required members themselves.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute">
+            <summary>
+            Specifies the syntax used in a string.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.#ctor(System.String)">
+            <summary>
+            Initializes the <see cref="T:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute"/> with the identifier of the syntax used.
+            </summary>
+            <param name="syntax">The syntax identifier.</param>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.#ctor(System.String,System.Object[])">
+            <summary>Initializes the <see cref="T:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute"/> with the identifier of the syntax used.</summary>
+            <param name="syntax">The syntax identifier.</param>
+            <param name="arguments">Optional arguments associated with the specific syntax employed.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Syntax">
+            <summary>Gets the identifier of the syntax used.</summary>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Arguments">
+            <summary>Optional arguments associated with the specific syntax employed.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.CompositeFormat">
+            <summary>The syntax identifier for strings containing composite formats for string formatting.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.DateOnlyFormat">
+            <summary>The syntax identifier for strings containing date format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.DateTimeFormat">
+            <summary>The syntax identifier for strings containing date and time format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.EnumFormat">
+            <summary>The syntax identifier for strings containing <see cref="T:System.Enum"/> format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.GuidFormat">
+            <summary>The syntax identifier for strings containing <see cref="T:System.Guid"/> format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Json">
+            <summary>The syntax identifier for strings containing JavaScript Object Notation (JSON).</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.NumericFormat">
+            <summary>The syntax identifier for strings containing numeric format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Regex">
+            <summary>The syntax identifier for strings containing regular expressions.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.TimeOnlyFormat">
+            <summary>The syntax identifier for strings containing time format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.TimeSpanFormat">
+            <summary>The syntax identifier for strings containing <see cref="T:System.TimeSpan"/> format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Uri">
+            <summary>The syntax identifier for strings containing URIs.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Xml">
+            <summary>The syntax identifier for strings containing XML.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.UnscopedRefAttribute">
+            <summary>
+            Used to indicate a byref escapes and is not scoped.
+            </summary>
+            <remarks>
+            <para>
+            There are several cases where the C# compiler treats a <see langword="ref"/> as implicitly
+            <see langword="scoped"/> - where the compiler does not allow the <see langword="ref"/> to escape the method.
+            </para>
+            <para>
+            For example:
+            <list type="number">
+                <item><see langword="this"/> for <see langword="struct"/> instance methods.</item>
+                <item><see langword="ref"/> parameters that refer to <see langword="ref"/> <see langword="struct"/> types.</item>
+                <item><see langword="out"/> parameters.</item>
+            </list>
+            </para>
+            <para>
+            This attribute is used in those instances where the <see langword="ref"/> should be allowed to escape.
+            </para>
+            <para>
+            Applying this attribute, in any form, has impact on consumers of the applicable API. It is necessary for
+            API authors to understand the lifetime implications of applying this attribute and how it may impact their users.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:System.Index">
+            <summary>Represent a type can be used to index a collection either from the start or the end.</summary>
+            <remarks>
+            Index is used by the C# compiler to support the new index syntax
+            <code>
+            int[] someArray = new int[5] { 1, 2, 3, 4, 5 } ;
+            int lastElement = someArray[^1]; // lastElement = 5
+            </code>
+            </remarks>
+        </member>
+        <member name="M:System.Index.#ctor(System.Int32,System.Boolean)">
+            <summary>Construct an Index using a value and indicating if the index is from the start or from the end.</summary>
+            <param name="value">The index value. it has to be zero or positive number.</param>
+            <param name="fromEnd">Indicating if the index is from the start or from the end.</param>
+            <remarks>
+            If the Index constructed from the end, index value 1 means pointing at the last element and index value 0 means pointing at beyond last element.
+            </remarks>
+        </member>
+        <member name="P:System.Index.Start">
+            <summary>Create an Index pointing at first element.</summary>
+        </member>
+        <member name="P:System.Index.End">
+            <summary>Create an Index pointing at beyond last element.</summary>
+        </member>
+        <member name="M:System.Index.FromStart(System.Int32)">
+            <summary>Create an Index from the start at the position indicated by the value.</summary>
+            <param name="value">The index value from the start.</param>
+        </member>
+        <member name="M:System.Index.FromEnd(System.Int32)">
+            <summary>Create an Index from the end at the position indicated by the value.</summary>
+            <param name="value">The index value from the end.</param>
+        </member>
+        <member name="P:System.Index.Value">
+            <summary>Returns the index value.</summary>
+        </member>
+        <member name="P:System.Index.IsFromEnd">
+            <summary>Indicates whether the index is from the start or the end.</summary>
+        </member>
+        <member name="M:System.Index.GetOffset(System.Int32)">
+            <summary>Calculate the offset from the start using the giving collection length.</summary>
+            <param name="length">The length of the collection that the Index will be used with. length has to be a positive value</param>
+            <remarks>
+            For performance reason, we don't validate the input length parameter and the returned offset value against negative values.
+            we don't validate either the returned offset is greater than the input length.
+            It is expected Index will be used with collections which always have non negative length/count. If the returned offset is negative and
+            then used to index a collection will get out of range exception which will be same affect as the validation.
+            </remarks>
+        </member>
+        <member name="M:System.Index.Equals(System.Object)">
+            <summary>Indicates whether the current Index object is equal to another object of the same type.</summary>
+            <param name="value">An object to compare with this object</param>
+        </member>
+        <member name="M:System.Index.Equals(System.Index)">
+            <summary>Indicates whether the current Index object is equal to another Index object.</summary>
+            <param name="other">An object to compare with this object</param>
+        </member>
+        <member name="M:System.Index.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary>
+        </member>
+        <member name="M:System.Index.op_Implicit(System.Int32)~System.Index">
+            <summary>Converts integer number to an Index.</summary>
+        </member>
+        <member name="M:System.Index.ToString">
+            <summary>Converts the value of the current Index object to its equivalent string representation.</summary>
+        </member>
+        <member name="T:System.Range">
+            <summary>Represent a range has start and end indexes.</summary>
+            <remarks>
+            Range is used by the C# compiler to support the range syntax.
+            <code>
+            int[] someArray = new int[5] { 1, 2, 3, 4, 5 };
+            int[] subArray1 = someArray[0..2]; // { 1, 2 }
+            int[] subArray2 = someArray[1..^0]; // { 2, 3, 4, 5 }
+            </code>
+            </remarks>
+        </member>
+        <member name="P:System.Range.Start">
+            <summary>Represent the inclusive start index of the Range.</summary>
+        </member>
+        <member name="P:System.Range.End">
+            <summary>Represent the exclusive end index of the Range.</summary>
+        </member>
+        <member name="M:System.Range.#ctor(System.Index,System.Index)">
+            <summary>Construct a Range object using the start and end indexes.</summary>
+            <param name="start">Represent the inclusive start index of the range.</param>
+            <param name="end">Represent the exclusive end index of the range.</param>
+        </member>
+        <member name="M:System.Range.Equals(System.Object)">
+            <summary>Indicates whether the current Range object is equal to another object of the same type.</summary>
+            <param name="value">An object to compare with this object</param>
+        </member>
+        <member name="M:System.Range.Equals(System.Range)">
+            <summary>Indicates whether the current Range object is equal to another Range object.</summary>
+            <param name="other">An object to compare with this object</param>
+        </member>
+        <member name="M:System.Range.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary>
+        </member>
+        <member name="M:System.Range.ToString">
+            <summary>Converts the value of the current Range object to its equivalent string representation.</summary>
+        </member>
+        <member name="M:System.Range.StartAt(System.Index)">
+            <summary>Create a Range object starting from start index to the end of the collection.</summary>
+        </member>
+        <member name="M:System.Range.EndAt(System.Index)">
+            <summary>Create a Range object starting from first element in the collection to the end Index.</summary>
+        </member>
+        <member name="P:System.Range.All">
+            <summary>Create a Range object starting from first element to the end.</summary>
+        </member>
+        <member name="M:System.Range.GetOffsetAndLength(System.Int32)">
+            <summary>Calculate the start offset and length of range object using a collection length.</summary>
+            <param name="length">The length of the collection that the range will be used with. length has to be a positive value.</param>
+            <remarks>
+            For performance reason, we don't validate the input length parameter against negative values.
+            It is expected Range will be used with collections which always have non negative length/count.
+            We validate the range is inside the length scope though.
+            </remarks>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute">
+            <summary>
+            An attribute that allows parameters to receive the expression of other parameters.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute"/> class.
+            </summary>
+            <param name="parameterName">The condition parameter value.</param>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute.ParameterName">
+            <summary>
+            Gets the parameter name the expression is retrieved from.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.CollectionBuilderAttribute.#ctor(System.Type,System.String)">
+            <summary>
+            Initialize the attribute to refer to the <paramref name="methodName"/> method on the <paramref name="builderType"/> type.
+            </summary>
+            <param name="builderType">The type of the builder to use to construct the collection.</param>
+            <param name="methodName">The name of the method on the builder to use to construct the collection.</param>
+            <remarks>
+            <paramref name="methodName"/> must refer to a static method that accepts a single parameter of
+            type <see cref="T:System.ReadOnlySpan`1"/> and returns an instance of the collection being built containing
+            a copy of the data from that span.  In future releases of .NET, additional patterns may be supported.
+            </remarks>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CollectionBuilderAttribute.BuilderType">
+            <summary>
+            Gets the type of the builder to use to construct the collection.
+            </summary>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CollectionBuilderAttribute.MethodName">
+            <summary>
+            Gets the name of the method on the builder to use to construct the collection.
+            </summary>
+            <remarks>
+            This should match the metadata name of the target method.
+            For example, this might be ".ctor" if targeting the type's constructor.
+            </remarks>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute">
+            <summary>
+            Indicates that compiler support for a particular feature is required for the location where this attribute is applied.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the <see cref="T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute"/> type.
+            </summary>
+            <param name="featureName">The name of the feature to indicate.</param>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName">
+            <summary>
+            The name of the compiler feature.
+            </summary>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.IsOptional">
+            <summary>
+            If true, the compiler can choose to allow access to the location where this attribute is applied if it does not understand <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/>.
+            </summary>
+        </member>
+        <member name="F:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.RefStructs">
+            <summary>
+            The <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/> used for the ref structs C# feature.
+            </summary>
+        </member>
+        <member name="F:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.RequiredMembers">
+            <summary>
+            The <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/> used for the required members C# feature.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute">
+            <summary>
+            Indicates which arguments to a method involving an interpolated string handler should be passed to that handler.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
+            </summary>
+            <param name="argument">The name of the argument that should be passed to the handler.</param>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
+            </summary>
+            <param name="arguments">The names of the arguments that should be passed to the handler.</param>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.Arguments">
+            <summary>
+            Gets the names of the arguments that should be passed to the handler.
+            </summary>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerAttribute">
+            <summary>
+            Indicates the attributed type is to be used as an interpolated string handler.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.IsExternalInit">
+            <summary>
+            Reserved to be used by the compiler for tracking metadata.
+            This class should not be used by developers in source code.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.ModuleInitializerAttribute">
+             <summary>
+             Used to indicate to the compiler that a method should be called
+             in its containing module's initializer.
+             </summary>
+             <remarks>
+             When one or more valid methods
+             with this attribute are found in a compilation, the compiler will
+             emit a module initializer which calls each of the attributed methods.
+            
+             Certain requirements are imposed on any method targeted with this attribute:
+             - The method must be `static`.
+             - The method must be an ordinary member method, as opposed to a property accessor, constructor, local function, etc.
+             - The method must be parameterless.
+             - The method must return `void`.
+             - The method must not be generic or be contained in a generic type.
+             - The method's effective accessibility must be `internal` or `public`.
+            
+             The specification for module initializers in the .NET runtime can be found here:
+             https://github.com/dotnet/runtime/blob/main/docs/design/specs/Ecma-335-Augments.md#module-initializer
+             </remarks>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute">
+            <summary>
+            Specifies the priority of a member in overload resolution. When unspecified, the default priority is 0.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute"/> class.
+            </summary>
+            <param name="priority">The priority of the attributed member. Higher numbers are prioritized, lower numbers are deprioritized. 0 is the default if no attribute is present.</param>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute.Priority">
+            <summary>
+            The priority of the member.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.ParamCollectionAttribute">
+            <summary>
+            Indicates that a method will allow a variable number of arguments in its invocation.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.RequiredMemberAttribute">
+            <summary>
+            Specifies that a type has required members or that a member is required.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.RequiresLocationAttribute">
+            <summary>
+            Reserved for use by a compiler for tracking metadata.
+            This attribute should not be used by developers in source code.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.SkipLocalsInitAttribute">
+            <summary>
+            Used to indicate to the compiler that the <c>.locals init</c> flag should not be set in method headers.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute"/> class with the specified message.
+            </summary>
+            <param name="message">An optional message associated with this attribute instance.</param>
+        </member>
+        <member name="P:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.Message">
+            <summary>
+            Returns the optional message associated with this attribute instance.
+            </summary>
+        </member>
+        <member name="P:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.Url">
+            <summary>
+            Returns the optional URL associated with this attribute instance.
+            </summary>
+        </member>
+    </members>
+</doc>
