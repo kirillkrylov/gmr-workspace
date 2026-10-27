@@ -50,7 +50,8 @@
 
     <Target Name="CopyZerobusForkToLibs" AfterTargets="ResolveProjectReferences" BeforeTargets="ResolveAssemblyReferences"
             Condition="'$(ZerobusLocalBuild)' == 'true'">
-        <MSBuild Projects="$(ZerobusForkProject)" Targets="GetTargetPath" Properties="Configuration=$(Configuration)">
+        <!-- Build, not GetTargetPath: in a solution build the ProjectReference may not have built the fork yet. -->
+        <MSBuild Projects="$(ZerobusForkProject)" Targets="Build" Properties="Configuration=$(Configuration)">
             <Output TaskParameter="TargetOutputs" ItemName="ZerobusForkAssembly" />
         </MSBuild>
         <Copy SourceFiles="@(ZerobusForkAssembly);@(ZerobusForkAssembly->'%(RootDir)%(Directory)%(Filename).xml')"
